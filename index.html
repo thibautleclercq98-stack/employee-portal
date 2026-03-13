@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Employee Portal</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #0a0f1e;
+    --surface: #111827;
+    --border: rgba(255,255,255,0.08);
+    --text: #f0f4ff;
+    --muted: #8892a4;
+    --card1-glow: rgba(26,107,58,0.4);
+    --card1-accent: #2ecc71;
+    --card2-glow: rgba(123,26,26,0.4);
+    --card2-accent: #ff4d4d;
+    --card3-glow: rgba(26,58,107,0.4);
+    --card3-accent: #4d9fff;
+  }
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+  }
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px);
+    background-size: 40px 40px;
+    pointer-events: none;
+    z-index: 0;
+  }
+  .container { position: relative; z-index: 1; max-width: 960px; width: 100%; }
+  .header { text-align: center; margin-bottom: 60px; animation: fadeDown 0.8s ease both; }
+  .company-badge {
+    display: inline-flex; align-items: center; gap: 8px;
+    background: rgba(255,255,255,0.05); border: 1px solid var(--border);
+    border-radius: 100px; padding: 6px 16px; font-size: 12px; font-weight: 500;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); margin-bottom: 24px;
+  }
+  .company-badge::before {
+    content: ''; width: 6px; height: 6px; border-radius: 50%;
+    background: #2ecc71; box-shadow: 0 0 8px #2ecc71; animation: pulse 2s infinite;
+  }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.4; } }
+  h1 {
+    font-family: 'Playfair Display', serif; font-size: clamp(36px, 6vw, 64px);
+    font-weight: 900; line-height: 1.1; letter-spacing: -0.02em; margin-bottom: 16px;
+  }
+  h1 span { background: linear-gradient(135deg, #fff 0%, #8892a4 100%); -webkit-background-clip: text; -webkit-text-fill-color: transparent; background-clip: text; }
+  .subtitle { font-size: 16px; color: var(--muted); font-weight: 300; letter-spacing: 0.02em; }
+  .cards { display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px; margin-bottom: 40px; }
+  @media (max-width: 700px) { .cards { grid-template-columns: 1fr; } }
+  .card {
+    position: relative; background: var(--surface); border: 1px solid var(--border);
+    border-radius: 20px; padding: 36px 28px; cursor: pointer; text-decoration: none;
+    color: inherit; display: flex; flex-direction: column; gap: 16px;
+    transition: transform 0.3s ease, box-shadow 0.3s ease, border-color 0.3s ease;
+    overflow: hidden; animation: fadeUp 0.8s ease both;
+  }
+  .card:nth-child(1) { animation-delay: 0.2s; }
+  .card:nth-child(2) { animation-delay: 0.35s; }
+  .card:nth-child(3) { animation-delay: 0.5s; }
+  .card::before { content: ''; position: absolute; inset: 0; opacity: 0; transition: opacity 0.3s ease; border-radius: 20px; }
+  .card-suggestion::before { background: radial-gradient(ellipse at top left, var(--card1-glow), transparent 70%); }
+  .card-safety::before { background: radial-gradient(ellipse at top left, var(--card2-glow), transparent 70%); }
+  .card-maintenance::before { background: radial-gradient(ellipse at top left, var(--card3-glow), transparent 70%); }
+  .card:hover::before { opacity: 1; }
+  .card-suggestion:hover { border-color: var(--card1-accent); box-shadow: 0 20px 60px var(--card1-glow); transform: translateY(-6px); }
+  .card-safety:hover { border-color: var(--card2-accent); box-shadow: 0 20px 60px var(--card2-glow); transform: translateY(-6px); }
+  .card-maintenance:hover { border-color: var(--card3-accent); box-shadow: 0 20px 60px var(--card3-glow); transform: translateY(-6px); }
+  .card-icon { width: 52px; height: 52px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; position: relative; z-index: 1; }
+  .card-suggestion .card-icon { background: rgba(46,204,113,0.15); }
+  .card-safety .card-icon { background: rgba(255,77,77,0.15); }
+  .card-maintenance .card-icon { background: rgba(77,159,255,0.15); }
+  .card-content { position: relative; z-index: 1; flex: 1; }
+  .card-tag { font-size: 10px; font-weight: 600; letter-spacing: 0.12em; text-transform: uppercase; margin-bottom: 8px; }
+  .card-suggestion .card-tag { color: var(--card1-accent); }
+  .card-safety .card-tag { color: var(--card2-accent); }
+  .card-maintenance .card-tag { color: var(--card3-accent); }
+  .card h2 { font-family: 'Playfair Display', serif; font-size: 22px; font-weight: 700; margin-bottom: 10px; line-height: 1.2; }
+  .card p { font-size: 14px; color: var(--muted); line-height: 1.6; font-weight: 300; }
+  .card-footer { position: relative; z-index: 1; display: flex; align-items: center; justify-content: space-between; padding-top: 16px; border-top: 1px solid var(--border); margin-top: auto; }
+  .card-time { font-size: 12px; color: var(--muted); }
+  .card-arrow { width: 32px; height: 32px; border-radius: 50%; border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; font-size: 14px; transition: transform 0.2s ease, background 0.2s ease; }
+  .card:hover .card-arrow { transform: translate(2px, -2px); }
+  .card-suggestion:hover .card-arrow { background: rgba(46,204,113,0.2); border-color: var(--card1-accent); }
+  .card-safety:hover .card-arrow { background: rgba(255,77,77,0.2); border-color: var(--card2-accent); }
+  .card-maintenance:hover .card-arrow { background: rgba(77,159,255,0.2); border-color: var(--card3-accent); }
+  .urgent-badge {
+    position: absolute; top: 16px; right: 16px; background: var(--card2-accent);
+    color: white; font-size: 9px; font-weight: 700; letter-spacing: 0.1em;
+    text-transform: uppercase; padding: 3px 8px; border-radius: 100px;
+    animation: urgentPulse 2s infinite;
+  }
+  @keyframes urgentPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,77,0.4); } 50% { box-shadow: 0 0 0 6px rgba(255,77,77,0); } }
+  .footer { text-align: center; font-size: 13px; color: var(--muted); animation: fadeUp 0.8s 0.6s ease both; }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-20px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="container">
+  <div class="header">
+    <div class="company-badge">Employee Portal</div>
+    <h1><span>How can we help<br>you today?</span></h1>
+    <p class="subtitle">Select a category below — your voice shapes our workplace</p>
+  </div>
+  <div class="cards">
+    <a class="card card-suggestion" href="https://forms.office.com/e/AJtsip7LD3" target="_blank">
+      <div class="card-icon">💡</div>
+      <div class="card-content">
+        <div class="card-tag">Share an idea</div>
+        <h2>Employee Suggestion</h2>
+        <p>Have an idea to improve our workplace, processes, or culture? We want to hear it — anonymous or not.</p>
+      </div>
+      <div class="card-footer">
+        <span class="card-time">⏱ 2 min</span>
+        <div class="card-arrow">↗</div>
+      </div>
+    </a>
+    <a class="card card-safety" href="https://forms.office.com/e/V58zEL3rcA" target="_blank">
+      <div class="urgent-badge">Urgent</div>
+      <div class="card-icon">🛡️</div>
+      <div class="card-content">
+        <div class="card-tag">Report immediately</div>
+        <h2>Safety Concern</h2>
+        <p>Spotted a hazard or safety risk? Report it immediately. Your report triggers an urgent alert to the Safety Manager.</p>
+      </div>
+      <div class="card-footer">
+        <span class="card-time">⏱ 2 min</span>
+        <div class="card-arrow">↗</div>
+      </div>
+    </a>
+    <a class="card card-maintenance" href="https://forms.office.com/e/H09qhGpfNU" target="_blank">
+      <div class="card-icon">🔧</div>
+      <div class="card-content">
+        <div class="card-tag">Request support</div>
+        <h2>Maintenance Request</h2>
+        <p>Something broken or need equipment fixed? Submit a request and our Facilities team will be notified right away.</p>
+      </div>
+      <div class="card-footer">
+        <span class="card-time">⏱ 2 min</span>
+        <div class="card-arrow">↗</div>
+      </div>
+    </a>
+  </div>
+  <div class="footer">
+    <span>🔒 All submissions are confidential &nbsp;•&nbsp; You will receive a follow-up response (If not anonymous)</span>
+  </div>
+</div>
+</body>
+</html>
