@@ -267,12 +267,13 @@
     };
 
     try {
-      await fetch(WEBHOOK_URL, {
-        method: 'POST',
-        body: JSON.stringify(payload),
-        mode: 'no-cors'
-      });
-
+     await fetch(WEBHOOK_URL, {
+  method: 'POST',
+  headers: {
+    'Content-Type': 'application/json'
+  },
+  body: JSON.stringify(payload)
+});
       // Show success
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('refBadge').textContent = refId;
