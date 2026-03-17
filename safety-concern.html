@@ -273,11 +273,14 @@
         body: JSON.stringify(payload),
         mode: 'no-cors'
       });
+
+      // Show success
       document.getElementById('formSection').style.display = 'none';
       document.getElementById('refBadge').textContent = refId;
       document.getElementById('successScreen').style.display = 'block';
       window.scrollTo(0, 0);
-    } catch(err) {
+
+    } catch (err) {
       errorMsg.textContent = '❌ Something went wrong. Please try again.';
       errorMsg.style.display = 'block';
       submitBtn.disabled = false;
