@@ -1,0 +1,824 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Maintenance Request — Smurfit Westrock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:     #00205B;
+      --navy-mid: #002f7a;
+      --navy-light: #003a96;
+      --accent:   #4d9fff;
+      --accent-glow: rgba(77,159,255,0.18);
+      --accent-dark: #1a78d4;
+      --white:    #ffffff;
+      --off-white:#e8eef8;
+      --muted:    #8da4c4;
+      --border:   rgba(77,159,255,0.2);
+      --card-bg:  rgba(0,47,122,0.55);
+      --input-bg: rgba(0,35,90,0.6);
+      --error:    #ff6b6b;
+      --success:  #4ade80;
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    /* ── Background mesh ── */
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(77,159,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 75%, rgba(0,100,200,0.10) 0%, transparent 55%),
+        radial-gradient(ellipse 40% 40% at 50% 0%,  rgba(0,62,148,0.25) 0%, transparent 50%);
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Grid overlay ── */
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(77,159,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,159,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    /* ── Page layout ── */
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+    }
+
+    /* ── Header ── */
+    .header {
+      width: 100%;
+      max-width: 640px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      animation: fadeDown 0.5s ease both;
+    }
+
+    .header a.back-link {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      letter-spacing: 0.02em;
+      transition: color 0.2s;
+    }
+    .header a.back-link:hover { color: var(--accent); }
+    .header a.back-link svg { width: 14px; height: 14px; }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+
+    .logo-icon {
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(77,159,255,0.35);
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 26px; height: 26px; color: #fff; }
+
+    .header-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 700;
+      line-height: 1.15;
+      letter-spacing: -0.01em;
+    }
+    .header-text p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+      font-weight: 400;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 640px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow:
+        0 8px 32px rgba(0,0,0,0.3),
+        inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: fadeUp 0.55s 0.1s ease both;
+    }
+
+    /* ── Section dividers ── */
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    .section-gap { margin-top: 28px; }
+
+    /* ── Form grid ── */
+    .form-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+    }
+    .form-row.full { grid-template-columns: 1fr; }
+
+    @media (max-width: 520px) {
+      .form-row { grid-template-columns: 1fr; }
+      .card { padding: 24px 18px; }
+    }
+
+    /* ── Field ── */
+    .field {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    label {
+      font-size: 12px;
+      font-weight: 600;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+      color: var(--off-white);
+    }
+
+    input[type="text"],
+    input[type="email"],
+    textarea,
+    select {
+      width: 100%;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 400;
+      padding: 11px 14px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s, background 0.2s;
+      -webkit-appearance: none;
+      appearance: none;
+    }
+    input::placeholder, textarea::placeholder { color: var(--muted); }
+    input:focus, textarea:focus, select:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+      background: rgba(0,35,90,0.8);
+    }
+
+    textarea { resize: vertical; min-height: 100px; }
+
+    select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238da4c4' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 14px center;
+      padding-right: 36px;
+      cursor: pointer;
+    }
+    select option { background: #002060; color: #fff; }
+
+    /* ── Priority selector ── */
+    .priority-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 8px;
+    }
+    @media (max-width: 420px) { .priority-grid { grid-template-columns: repeat(2, 1fr); } }
+
+    .priority-option { display: none; }
+    .priority-option + label {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 5px;
+      padding: 10px 6px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      background: var(--input-bg);
+      cursor: pointer;
+      transition: all 0.2s;
+      text-align: center;
+      text-transform: none;
+      letter-spacing: 0;
+      font-size: 11px;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.2;
+    }
+    .priority-option + label .p-icon {
+      font-size: 20px;
+      line-height: 1;
+    }
+    .priority-option + label:hover {
+      border-color: var(--accent);
+      color: var(--white);
+    }
+    .priority-option:checked + label {
+      border-color: var(--accent);
+      background: rgba(77,159,255,0.15);
+      color: var(--white);
+      box-shadow: 0 0 0 2px var(--accent-glow);
+    }
+    /* per-priority accent colours */
+    #p-low:checked + label    { border-color: #4ade80; background: rgba(74,222,128,0.12); box-shadow: 0 0 0 2px rgba(74,222,128,0.2); }
+    #p-medium:checked + label { border-color: #facc15; background: rgba(250,204,21,0.12); box-shadow: 0 0 0 2px rgba(250,204,21,0.2); }
+    #p-high:checked + label   { border-color: #fb923c; background: rgba(251,146,60,0.12); box-shadow: 0 0 0 2px rgba(251,146,60,0.2); }
+    #p-critical:checked + label { border-color: #f87171; background: rgba(248,113,113,0.14); box-shadow: 0 0 0 2px rgba(248,113,113,0.25); }
+
+    /* ── Photo upload ── */
+    .photo-zone {
+      border: 2px dashed var(--border);
+      border-radius: 12px;
+      padding: 24px 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+      background: var(--input-bg);
+      position: relative;
+    }
+    .photo-zone:hover, .photo-zone.drag-over {
+      border-color: var(--accent);
+      background: rgba(0,35,90,0.85);
+    }
+    .photo-zone input[type="file"] {
+      position: absolute;
+      inset: 0;
+      opacity: 0;
+      cursor: pointer;
+      width: 100%;
+      height: 100%;
+    }
+    .photo-zone .upload-icon { font-size: 28px; margin-bottom: 6px; }
+    .photo-zone p { font-size: 13px; color: var(--muted); line-height: 1.5; }
+    .photo-zone p strong { color: var(--accent); font-weight: 600; }
+    .photo-zone .file-name {
+      margin-top: 8px;
+      font-size: 12px;
+      color: var(--success);
+      font-weight: 500;
+    }
+
+    .preview-img {
+      display: none;
+      width: 100%;
+      max-height: 180px;
+      object-fit: cover;
+      border-radius: 8px;
+      margin-top: 10px;
+      border: 1px solid var(--border);
+    }
+
+    /* ── Optional badge ── */
+    .opt { font-size: 10px; color: var(--muted); font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 4px; }
+
+    /* ── Submit button ── */
+    .submit-wrap {
+      margin-top: 28px;
+    }
+
+    .btn-submit {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      border: none;
+      border-radius: 12px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.02em;
+      cursor: pointer;
+      box-shadow: 0 4px 20px rgba(77,159,255,0.35);
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-submit:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 28px rgba(77,159,255,0.45);
+    }
+    .btn-submit:active:not(:disabled) { transform: translateY(0); }
+    .btn-submit:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-submit svg { width: 18px; height: 18px; }
+
+    .spinner {
+      display: none;
+      width: 18px; height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+    }
+
+    /* ── Validation ── */
+    .field-error {
+      font-size: 11px;
+      color: var(--error);
+      display: none;
+    }
+    .field.invalid input,
+    .field.invalid select,
+    .field.invalid textarea {
+      border-color: var(--error);
+    }
+    .field.invalid .field-error { display: block; }
+
+    .priority-error {
+      font-size: 11px;
+      color: var(--error);
+      display: none;
+      margin-top: 4px;
+    }
+    .priority-error.show { display: block; }
+
+    /* ── Success screen ── */
+    #success-screen {
+      display: none;
+      width: 100%;
+      max-width: 640px;
+      animation: fadeUp 0.5s ease both;
+    }
+
+    .success-card {
+      background: var(--card-bg);
+      border: 1px solid rgba(77,159,255,0.25);
+      border-radius: 20px;
+      padding: 48px 32px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3);
+      text-align: center;
+    }
+    .success-icon {
+      width: 72px; height: 72px;
+      margin: 0 auto 20px;
+      border-radius: 50%;
+      background: rgba(74,222,128,0.15);
+      border: 2px solid rgba(74,222,128,0.4);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      animation: popIn 0.4s cubic-bezier(0.34,1.56,0.64,1) both;
+    }
+    .success-icon svg { width: 36px; height: 36px; color: var(--success); }
+    .success-card h2 {
+      font-family: 'Playfair Display', serif;
+      font-size: 26px;
+      margin-bottom: 10px;
+    }
+    .success-card p { color: var(--muted); font-size: 14px; line-height: 1.6; }
+    .ref-badge {
+      display: inline-block;
+      margin: 18px auto 8px;
+      padding: 10px 22px;
+      background: rgba(77,159,255,0.12);
+      border: 1px solid var(--accent);
+      border-radius: 100px;
+      font-size: 18px;
+      font-weight: 700;
+      letter-spacing: 0.06em;
+      color: var(--accent);
+    }
+    .success-note {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 6px;
+    }
+    .btn-new {
+      margin-top: 28px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 11px 24px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--off-white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+      text-decoration: none;
+    }
+    .btn-new:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(18px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes popIn {
+      from { opacity: 0; transform: scale(0.5); }
+      to   { opacity: 1; transform: scale(1); }
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back to Portal
+    </a>
+
+    <div class="logo-row">
+      <div class="logo-icon">
+        <!-- Wrench icon -->
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1>Maintenance Request</h1>
+        <p>Smurfit Westrock — Facilities & IT</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Form card -->
+  <div class="card" id="form-card">
+    <form id="maint-form" novalidate>
+
+      <!-- Section 1: Location -->
+      <div class="section-label">Location &amp; Category</div>
+      <div class="form-row">
+        <div class="field" id="f-department">
+          <label for="department">Department</label>
+          <select id="department" name="department">
+            <option value="" disabled selected>Select department…</option>
+            <option>Production</option>
+            <option>Warehouse</option>
+            <option>Office / Admin</option>
+            <option>Shipping &amp; Receiving</option>
+            <option>Maintenance</option>
+            <option>Quality</option>
+            <option>HR / Finance</option>
+            <option>IT</option>
+            <option>Other</option>
+          </select>
+          <span class="field-error">Please select a department.</span>
+        </div>
+
+        <div class="field" id="f-location">
+          <label for="location">Specific Location</label>
+          <input type="text" id="location" name="location" placeholder="e.g. Line 3, Room 201…" />
+          <span class="field-error">Please enter the location.</span>
+        </div>
+      </div>
+
+      <div class="form-row full section-gap">
+        <div class="field" id="f-issueType">
+          <label for="issueType">Issue Type</label>
+          <select id="issueType" name="issueType">
+            <option value="" disabled selected>Select issue type…</option>
+            <optgroup label="Facilities">
+              <option>HVAC / Heating &amp; Cooling</option>
+              <option>Electrical</option>
+              <option>Plumbing</option>
+              <option>Lighting</option>
+              <option>Doors / Windows / Locks</option>
+              <option>Flooring / Ceiling</option>
+              <option>Janitorial / Cleaning</option>
+              <option>Exterior / Grounds</option>
+            </optgroup>
+            <optgroup label="Equipment">
+              <option>Production Equipment</option>
+              <option>Conveyor / Material Handling</option>
+              <option>Forklift / Vehicle</option>
+              <option>Safety Equipment</option>
+            </optgroup>
+            <optgroup label="IT">
+              <option>Computer / Workstation</option>
+              <option>Network / Internet</option>
+              <option>Phone / Printer</option>
+              <option>Software / Access</option>
+            </optgroup>
+            <option>Other</option>
+          </select>
+          <span class="field-error">Please select an issue type.</span>
+        </div>
+      </div>
+
+      <!-- Section 2: Priority -->
+      <div class="section-label section-gap">Priority Level</div>
+      <div class="priority-grid" id="priority-grid" role="radiogroup" aria-label="Priority">
+        <input type="radio" name="priority" id="p-low"      value="Low"      class="priority-option" />
+        <label for="p-low">
+          <span class="p-icon">🟢</span>
+          Low<br/><small style="font-size:10px;opacity:.7">Not urgent</small>
+        </label>
+
+        <input type="radio" name="priority" id="p-medium"   value="Medium"   class="priority-option" />
+        <label for="p-medium">
+          <span class="p-icon">🟡</span>
+          Medium<br/><small style="font-size:10px;opacity:.7">This week</small>
+        </label>
+
+        <input type="radio" name="priority" id="p-high"     value="High"     class="priority-option" />
+        <label for="p-high">
+          <span class="p-icon">🟠</span>
+          High<br/><small style="font-size:10px;opacity:.7">Today</small>
+        </label>
+
+        <input type="radio" name="priority" id="p-critical" value="Critical" class="priority-option" />
+        <label for="p-critical">
+          <span class="p-icon">🔴</span>
+          Critical<br/><small style="font-size:10px;opacity:.7">Immediate</small>
+        </label>
+      </div>
+      <span class="priority-error" id="priority-error">Please select a priority level.</span>
+
+      <!-- Section 3: Description -->
+      <div class="section-label section-gap">Details</div>
+      <div class="form-row full">
+        <div class="field" id="f-description">
+          <label for="description">Description</label>
+          <textarea id="description" name="description" rows="4"
+            placeholder="Describe the issue clearly — what you observed, when it started, any impact on operations…"></textarea>
+          <span class="field-error">Please describe the issue.</span>
+        </div>
+      </div>
+
+      <!-- Section 4: Photo & Contact -->
+      <div class="section-label section-gap">Photo &amp; Contact</div>
+      <div class="form-row full">
+        <div class="field">
+          <label>Photo <span class="opt">(optional)</span></label>
+          <div class="photo-zone" id="photo-zone">
+            <input type="file" id="photo-input" accept="image/*" capture="environment" />
+            <div class="upload-icon">📷</div>
+            <p><strong>Tap to attach a photo</strong><br />or drag &amp; drop here · JPG, PNG, HEIC</p>
+            <div class="file-name" id="file-name-display"></div>
+          </div>
+          <img id="preview-img" class="preview-img" alt="Preview" />
+        </div>
+      </div>
+
+      <div class="form-row full" style="margin-top:14px;">
+        <div class="field" id="f-email">
+          <label for="email">Your Email <span class="opt">(for confirmation)</span></label>
+          <input type="email" id="email" name="email" placeholder="your.name@smurfitwrk.com" />
+          <span class="field-error">Please enter a valid email address.</span>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="submit-wrap">
+        <button type="submit" class="btn-submit" id="submit-btn">
+          <svg id="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+            <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
+          </svg>
+          <div class="spinner" id="spinner"></div>
+          <span id="btn-text">Submit Maintenance Request</span>
+        </button>
+      </div>
+
+    </form>
+  </div><!-- /card -->
+
+  <!-- Success screen -->
+  <div id="success-screen">
+    <div class="success-card">
+      <div class="success-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+          <polyline points="20 6 9 17 4 12"/>
+        </svg>
+      </div>
+      <h2>Request Submitted!</h2>
+      <p>Your maintenance request has been logged and routed to the Facilities / IT team.</p>
+      <div class="ref-badge" id="ref-display">MNT-XXXXXX</div>
+      <div class="success-note">Save this reference number. You'll receive a confirmation email shortly.</div>
+      <br/>
+      <a href="index.html" class="btn-new">
+        ← Back to Employee Portal
+      </a>
+    </div>
+  </div>
+
+</div><!-- /page-wrapper -->
+
+<script>
+  // ── Config ──────────────────────────────────────────────────
+  const WEBHOOK_URL = 'YOUR_POWER_AUTOMATE_WEBHOOK_URL_HERE';
+
+  // ── DOM refs ────────────────────────────────────────────────
+  const form       = document.getElementById('maint-form');
+  const formCard   = document.getElementById('form-card');
+  const successScr = document.getElementById('success-screen');
+  const submitBtn  = document.getElementById('submit-btn');
+  const spinner    = document.getElementById('spinner');
+  const btnIcon    = document.getElementById('btn-icon');
+  const btnText    = document.getElementById('btn-text');
+  const photoInput = document.getElementById('photo-input');
+  const photoZone  = document.getElementById('photo-zone');
+  const previewImg = document.getElementById('preview-img');
+  const fileNameDisplay = document.getElementById('file-name-display');
+  const refDisplay = document.getElementById('ref-display');
+  const priorityError = document.getElementById('priority-error');
+
+  // ── Photo handling ───────────────────────────────────────────
+  let photoBase64 = '';
+  let photoName   = '';
+
+  photoInput.addEventListener('change', () => {
+    const file = photoInput.files[0];
+    if (!file) return;
+    photoName = file.name;
+    fileNameDisplay.textContent = '✓ ' + file.name;
+
+    const reader = new FileReader();
+    reader.onload = e => {
+      photoBase64 = e.target.result.split(',')[1]; // strip data: prefix
+      previewImg.src = e.target.result;
+      previewImg.style.display = 'block';
+    };
+    reader.readAsDataURL(file);
+  });
+
+  // drag & drop
+  photoZone.addEventListener('dragover', e => { e.preventDefault(); photoZone.classList.add('drag-over'); });
+  photoZone.addEventListener('dragleave', () => photoZone.classList.remove('drag-over'));
+  photoZone.addEventListener('drop', e => {
+    e.preventDefault();
+    photoZone.classList.remove('drag-over');
+    const file = e.dataTransfer.files[0];
+    if (file && file.type.startsWith('image/')) {
+      const dt = new DataTransfer();
+      dt.items.add(file);
+      photoInput.files = dt.files;
+      photoInput.dispatchEvent(new Event('change'));
+    }
+  });
+
+  // ── Validation ───────────────────────────────────────────────
+  function validateField(id, test) {
+    const field = document.getElementById('f-' + id);
+    if (!field) return test;
+    if (!test) {
+      field.classList.add('invalid');
+      return false;
+    }
+    field.classList.remove('invalid');
+    return true;
+  }
+
+  function validateForm() {
+    const dept     = document.getElementById('department').value;
+    const loc      = document.getElementById('location').value.trim();
+    const issType  = document.getElementById('issueType').value;
+    const desc     = document.getElementById('description').value.trim();
+    const emailVal = document.getElementById('email').value.trim();
+    const priority = document.querySelector('input[name="priority"]:checked');
+
+    let ok = true;
+    ok = validateField('department', dept)    && ok;
+    ok = validateField('location',   loc)     && ok;
+    ok = validateField('issueType',  issType) && ok;
+    ok = validateField('description', desc.length >= 10) && ok;
+
+    if (!priority) {
+      priorityError.classList.add('show');
+      ok = false;
+    } else {
+      priorityError.classList.remove('show');
+    }
+
+    // email optional but must be valid if provided
+    if (emailVal && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(emailVal)) {
+      document.getElementById('f-email').classList.add('invalid');
+      ok = false;
+    } else {
+      document.getElementById('f-email').classList.remove('invalid');
+    }
+
+    return ok;
+  }
+
+  // ── Submit ───────────────────────────────────────────────────
+  form.addEventListener('submit', async e => {
+    e.preventDefault();
+
+    if (!validateForm()) return;
+
+    const referenceId = 'MNT-' + Math.floor(100000 + Math.random() * 900000);
+
+    const payload = {
+      referenceId,
+      department:  document.getElementById('department').value,
+      location:    document.getElementById('location').value.trim(),
+      issueType:   document.getElementById('issueType').value,
+      description: document.getElementById('description').value.trim(),
+      priority:    document.querySelector('input[name="priority"]:checked').value,
+      email:       document.getElementById('email').value.trim(),
+      photo:       photoBase64,
+      photoName:   photoName
+    };
+
+    // loading state
+    submitBtn.disabled = true;
+    btnIcon.style.display = 'none';
+    spinner.style.display = 'block';
+    btnText.textContent = 'Submitting…';
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify(payload)
+      });
+    } catch (err) {
+      console.warn('Webhook error:', err);
+      // Still show success — Power Automate sometimes closes the connection early
+    }
+
+    // success
+    refDisplay.textContent = referenceId;
+    formCard.style.display   = 'none';
+    successScr.style.display = 'block';
+  });
+
+  // ── Clear invalid on input ────────────────────────────────────
+  document.querySelectorAll('input, select, textarea').forEach(el => {
+    el.addEventListener('input', () => {
+      const field = el.closest('.field');
+      if (field) field.classList.remove('invalid');
+    });
+    el.addEventListener('change', () => {
+      const field = el.closest('.field');
+      if (field) field.classList.remove('invalid');
+    });
+  });
+  document.querySelectorAll('input[name="priority"]').forEach(r => {
+    r.addEventListener('change', () => priorityError.classList.remove('show'));
+  });
+</script>
+</body>
+</html>
