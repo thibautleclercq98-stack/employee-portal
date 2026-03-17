@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Safety Concern — Smurfit Westrock</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #00205B;
+    --surface: rgba(255,255,255,0.05);
+    --border: rgba(255,255,255,0.12);
+    --border-focus: #ff4d4d;
+    --text: #f0f4ff;
+    --muted: #8892a4;
+    --accent: #ff4d4d;
+    --accent-glow: rgba(255,77,77,0.3);
+    --success: #2ecc71;
+    --input-bg: rgba(255,255,255,0.07);
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); min-height: 100vh; padding: 0; overflow-x: hidden; }
+  body::before { content: ''; position: fixed; inset: 0; background-image: linear-gradient(rgba(255,255,255,0.03) 1px, transparent 1px), linear-gradient(90deg, rgba(255,255,255,0.03) 1px, transparent 1px); background-size: 40px 40px; pointer-events: none; z-index: 0; }
+  .page { position: relative; z-index: 1; max-width: 600px; margin: 0 auto; padding: 32px 20px 60px; }
+  .header { display: flex; align-items: center; gap: 16px; margin-bottom: 32px; animation: fadeDown 0.6s ease both; }
+  .back-btn { display: flex; align-items: center; gap: 6px; color: var(--muted); text-decoration: none; font-size: 14px; transition: color 0.2s; }
+  .back-btn:hover { color: var(--text); }
+  .logo { height: 36px; width: auto; margin-left: auto; }
+  .title-card { background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.3); border-radius: 16px; padding: 24px; margin-bottom: 28px; display: flex; align-items: center; gap: 16px; animation: fadeDown 0.6s 0.1s ease both; }
+  .title-icon { width: 52px; height: 52px; background: rgba(255,77,77,0.15); border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 26px; flex-shrink: 0; }
+  .title-card h1 { font-family: 'Playfair Display', serif; font-size: 24px; font-weight: 700; margin-bottom: 4px; }
+  .title-card p { font-size: 13px; color: var(--muted); }
+  .urgent-pill { display: inline-flex; align-items: center; gap: 5px; background: var(--accent); color: white; font-size: 10px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; padding: 3px 10px; border-radius: 100px; margin-top: 6px; animation: urgentPulse 2s infinite; }
+  @keyframes urgentPulse { 0%, 100% { box-shadow: 0 0 0 0 rgba(255,77,77,0.4); } 50% { box-shadow: 0 0 0 6px rgba(255,77,77,0); } }
+  .form { display: flex; flex-direction: column; gap: 20px; }
+  .field { animation: fadeUp 0.6s ease both; }
+  .field:nth-child(1) { animation-delay: 0.15s; }
+  .field:nth-child(2) { animation-delay: 0.2s; }
+  .field:nth-child(3) { animation-delay: 0.25s; }
+  .field:nth-child(4) { animation-delay: 0.3s; }
+  .field:nth-child(5) { animation-delay: 0.35s; }
+  .field:nth-child(6) { animation-delay: 0.4s; }
+  label { display: block; font-size: 13px; font-weight: 500; color: var(--muted); margin-bottom: 8px; letter-spacing: 0.05em; text-transform: uppercase; }
+  label .required { color: var(--accent); margin-left: 3px; }
+  label .optional { color: var(--muted); font-size: 11px; font-weight: 400; text-transform: none; letter-spacing: 0; margin-left: 4px; }
+  input, select, textarea { width: 100%; background: var(--input-bg); border: 1px solid var(--border); border-radius: 10px; color: var(--text); font-family: 'DM Sans', sans-serif; font-size: 15px; padding: 14px 16px; transition: border-color 0.2s, background 0.2s, box-shadow 0.2s; outline: none; appearance: none; }
+  input:focus, select:focus, textarea:focus { border-color: var(--accent); background: rgba(255,77,77,0.05); box-shadow: 0 0 0 3px var(--accent-glow); }
+  select { cursor: pointer; background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%238892a4' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 16px center; padding-right: 40px; }
+  select option { background: #0a1628; color: white; }
+  textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+  .urgency-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 10px; }
+  .urgency-option { display: none; }
+  .urgency-label { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 8px; border: 1px solid var(--border); border-radius: 10px; cursor: pointer; transition: all 0.2s; text-align: center; background: var(--input-bg); }
+  .urgency-label:hover { border-color: rgba(255,255,255,0.3); }
+  .urgency-icon { font-size: 22px; }
+  .urgency-text { font-size: 12px; font-weight: 500; }
+  .urgency-sub { font-size: 10px; color: var(--muted); }
+  .urgency-option:checked + .urgency-label { border-color: var(--accent); background: rgba(255,77,77,0.1); box-shadow: 0 0 0 2px var(--accent-glow); }
+  .photo-zone { border: 2px dashed var(--border); border-radius: 12px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; background: var(--input-bg); position: relative; }
+  .photo-zone:hover { border-color: rgba(255,255,255,0.3); }
+  .photo-zone.has-photo { border-color: var(--success); border-style: solid; background: rgba(46,204,113,0.05); }
+  .photo-zone input[type="file"] { position: absolute; inset: 0; opacity: 0; cursor: pointer; width: 100%; height: 100%; }
+  .photo-icon { font-size: 32px; margin-bottom: 8px; }
+  .photo-text { font-size: 14px; color: var(--muted); }
+  .photo-hint { font-size: 12px; color: var(--muted); margin-top: 4px; opacity: 0.7; }
+  .photo-preview { max-width: 100%; max-height: 200px; border-radius: 8px; margin-top: 12px; display: none; }
+  .photo-name { font-size: 13px; color: var(--success); margin-top: 8px; display: none; }
+  .submit-btn { width: 100%; padding: 16px; background: var(--accent); border: none; border-radius: 12px; color: white; font-family: 'DM Sans', sans-serif; font-size: 16px; font-weight: 600; cursor: pointer; transition: all 0.2s; margin-top: 8px; animation: fadeUp 0.6s 0.5s ease both; }
+  .submit-btn:hover { background: #e03030; transform: translateY(-1px); box-shadow: 0 8px 24px var(--accent-glow); }
+  .submit-btn:disabled { opacity: 0.6; cursor: not-allowed; transform: none; }
+  .spinner { display: none; width: 20px; height: 20px; border: 2px solid rgba(255,255,255,0.3); border-top-color: white; border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto; }
+  @keyframes spin { to { transform: rotate(360deg); } }
+  .error-msg { background: rgba(255,77,77,0.1); border: 1px solid rgba(255,77,77,0.3); border-radius: 10px; padding: 12px 16px; font-size: 14px; color: #ff6b6b; display: none; }
+  .success-screen { display: none; text-align: center; padding: 60px 20px; animation: fadeUp 0.6s ease both; }
+  .success-icon { font-size: 64px; margin-bottom: 24px; }
+  .success-screen h2 { font-family: 'Playfair Display', serif; font-size: 28px; margin-bottom: 12px; }
+  .success-screen p { color: var(--muted); font-size: 15px; line-height: 1.6; margin-bottom: 8px; }
+  .ref-badge { display: inline-block; background: rgba(46,204,113,0.15); border: 1px solid var(--success); border-radius: 10px; padding: 12px 24px; margin: 20px 0; font-size: 22px; font-weight: 700; color: var(--success); letter-spacing: 0.05em; }
+  .action-btn { display: inline-block; margin-top: 12px; padding: 12px 28px; border: 1px solid var(--border); border-radius: 10px; color: var(--muted); text-decoration: none; font-size: 14px; transition: all 0.2s; cursor: pointer; background: none; font-family: 'DM Sans', sans-serif; }
+  .action-btn:hover { border-color: rgba(255,255,255,0.3); color: var(--text); }
+  @keyframes fadeDown { from { opacity: 0; transform: translateY(-16px); } to { opacity: 1; transform: translateY(0); } }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="header">
+    <a href="index.html" class="back-btn">← Back to Portal</a>
+    <img src="smurfit-logo.png" alt="Smurfit Westrock" class="logo" onerror="this.style.display='none'">
+  </div>
+
+  <div id="formSection">
+    <div class="title-card">
+      <div class="title-icon">🛡️</div>
+      <div>
+        <h1>Safety Concern</h1>
+        <p>Your report goes directly to the Safety Manager</p>
+        <div class="urgent-pill">⚡ Urgent routing</div>
+      </div>
+    </div>
+
+    <form class="form" id="safetyForm">
+      <div class="field">
+        <label>Department <span class="required">*</span></label>
+        <select id="location" required>
+          <option value="" disabled selected>Select your department...</option>
+          <option>Operations</option>
+          <option>Quality</option>
+          <option>Maintenance</option>
+          <option>HR</option>
+          <option>Finance</option>
+          <option>IT</option>
+          <option>Warehouse</option>
+          <option>Other</option>
+        </select>
+      </div>
+
+      <div class="field">
+        <label>Urgency Level <span class="required">*</span></label>
+        <div class="urgency-grid">
+          <div>
+            <input type="radio" name="urgency" id="urgLow" value="Low — No immediate danger" class="urgency-option" required>
+            <label for="urgLow" class="urgency-label">
+              <span class="urgency-icon">🟡</span>
+              <span class="urgency-text">Low</span>
+              <span class="urgency-sub">No immediate danger</span>
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="urgency" id="urgMed" value="Medium — Needs attention soon" class="urgency-option">
+            <label for="urgMed" class="urgency-label">
+              <span class="urgency-icon">🟠</span>
+              <span class="urgency-text">Medium</span>
+              <span class="urgency-sub">Needs attention soon</span>
+            </label>
+          </div>
+          <div>
+            <input type="radio" name="urgency" id="urgHigh" value="High — Immediate danger" class="urgency-option">
+            <label for="urgHigh" class="urgency-label">
+              <span class="urgency-icon">🔴</span>
+              <span class="urgency-text">High</span>
+              <span class="urgency-sub">Immediate danger</span>
+            </label>
+          </div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Description <span class="required">*</span></label>
+        <textarea id="description" placeholder="Describe the safety concern in detail — what did you see, where exactly, when did it happen..." required></textarea>
+      </div>
+
+      <div class="field">
+        <label>Near Miss Solution <span class="optional">(optional)</span></label>
+        <textarea id="solution" placeholder="Do you have a suggestion to fix or prevent this issue?"></textarea>
+      </div>
+
+      <div class="field">
+        <label>Photo <span class="optional">(optional)</span></label>
+        <div class="photo-zone" id="photoZone">
+          <input type="file" id="photoInput" accept="image/*" capture="environment">
+          <div class="photo-icon">📸</div>
+          <div class="photo-text">Tap to take a photo or upload one</div>
+          <div class="photo-hint">JPG, PNG or HEIC — max 10MB</div>
+          <img id="photoPreview" class="photo-preview" alt="Preview">
+          <div id="photoName" class="photo-name"></div>
+        </div>
+      </div>
+
+      <div class="field">
+        <label>Your Email <span class="optional">(optional — for follow-up)</span></label>
+        <input type="email" id="email" placeholder="your.name@smurfitwestrock.com">
+      </div>
+
+      <div class="error-msg" id="errorMsg"></div>
+
+      <button type="submit" class="submit-btn" id="submitBtn">
+        <span id="btnText">🛡️ Submit Safety Report</span>
+        <div class="spinner" id="spinner"></div>
+      </button>
+    </form>
+  </div>
+
+  <div class="success-screen" id="successScreen">
+    <div class="success-icon">✅</div>
+    <h2>Report Submitted!</h2>
+    <p>Your safety concern has been logged and the<br>Safety Manager has been alerted immediately.</p>
+    <div class="ref-badge" id="refBadge"></div>
+    <p style="font-size:13px; margin-top: -10px;">📧 Keep this reference number for follow-up queries.</p>
+    <br>
+    <button class="action-btn" onclick="resetForm()">Submit another report</button>
+    <br>
+    <a href="index.html" class="action-btn" style="margin-top: 8px;">← Back to Portal</a>
+  </div>
+</div>
+
+<script>
+  const WEBHOOK_URL = 'https://default67d2558fa4af4478bc72d7585f436b.ad.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/1f419039518e43309b27078c7a621c5c/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=TtDTXnVMMuOukYUrEQZw45roIVlik-XiozcmIARM22M';
+
+  // Photo preview
+  document.getElementById('photoInput').addEventListener('change', function() {
+    const file = this.files[0];
+    if (file) {
+      const reader = new FileReader();
+      reader.onload = e => {
+        const preview = document.getElementById('photoPreview');
+        const name = document.getElementById('photoName');
+        preview.src = e.target.result;
+        preview.style.display = 'block';
+        name.textContent = '✅ ' + file.name;
+        name.style.display = 'block';
+        document.getElementById('photoZone').classList.add('has-photo');
+      };
+      reader.readAsDataURL(file);
+    }
+  });
+
+  function generateRefId() {
+    return 'SAF-' + Math.floor(100000 + Math.random() * 900000);
+  }
+
+  function fileToBase64(file) {
+    return new Promise((resolve) => {
+      const reader = new FileReader();
+      reader.onload = () => resolve(reader.result.split(',')[1]);
+      reader.readAsDataURL(file);
+    });
+  }
+
+  document.getElementById('safetyForm').addEventListener('submit', async function(e) {
+    e.preventDefault();
+    const errorMsg = document.getElementById('errorMsg');
+    errorMsg.style.display = 'none';
+
+    const urgency = document.querySelector('input[name="urgency"]:checked');
+    if (!urgency) {
+      errorMsg.textContent = '⚠️ Please select an urgency level.';
+      errorMsg.style.display = 'block';
+      return;
+    }
+
+    const submitBtn = document.getElementById('submitBtn');
+    const btnText = document.getElementById('btnText');
+    const spinner = document.getElementById('spinner');
+    submitBtn.disabled = true;
+    btnText.style.display = 'none';
+    spinner.style.display = 'block';
+
+    const refId = generateRefId();
+    let photoBase64 = '';
+    let photoFileName = '';
+    const photoFile = document.getElementById('photoInput').files[0];
+    if (photoFile) {
+      photoBase64 = await fileToBase64(photoFile);
+      photoFileName = photoFile.name;
+    }
+
+    const payload = {
+      referenceId: refId,
+      location: document.getElementById('location').value,
+      urgency: urgency.value,
+      description: document.getElementById('description').value,
+      solution: document.getElementById('solution').value,
+      email: document.getElementById('email').value,
+      photo: photoBase64,
+      photoName: photoFileName
+    };
+
+    try {
+      await fetch(WEBHOOK_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(payload),
+        mode: 'no-cors'
+      });
+      document.getElementById('formSection').style.display = 'none';
+      document.getElementById('refBadge').textContent = refId;
+      document.getElementById('successScreen').style.display = 'block';
+      window.scrollTo(0, 0);
+    } catch(err) {
+      errorMsg.textContent = '❌ Something went wrong. Please try again.';
+      errorMsg.style.display = 'block';
+      submitBtn.disabled = false;
+      btnText.style.display = 'block';
+      spinner.style.display = 'none';
+    }
+  });
+
+  function resetForm() {
+    document.getElementById('safetyForm').reset();
+    document.getElementById('photoPreview').style.display = 'none';
+    document.getElementById('photoName').style.display = 'none';
+    document.getElementById('photoZone').classList.remove('has-photo');
+    document.getElementById('formSection').style.display = 'block';
+    document.getElementById('successScreen').style.display = 'none';
+    window.scrollTo(0, 0);
+  }
+</script>
+</body>
+</html>
