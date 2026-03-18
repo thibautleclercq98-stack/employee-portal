@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Check Request Status — Smurfit Westrock</title>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy:      #00205B;
+      --navy-mid:  #002f7a;
+      --accent:    #4d9fff;
+      --accent-glow: rgba(77,159,255,0.18);
+      --accent-dark: #1a78d4;
+      --white:     #ffffff;
+      --off-white: #e8eef8;
+      --muted:     #8da4c4;
+      --border:    rgba(77,159,255,0.2);
+      --card-bg:   rgba(0,47,122,0.55);
+      --input-bg:  rgba(0,35,90,0.6);
+      --error:     #ff6b6b;
+      --success:   #4ade80;
+      --warning:   #facc15;
+      --orange:    #fb923c;
+    }
+
+    html, body {
+      min-height: 100vh;
+      font-family: 'DM Sans', sans-serif;
+      background-color: var(--navy);
+      color: var(--white);
+      overflow-x: hidden;
+    }
+
+    body::before {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background:
+        radial-gradient(ellipse 80% 60% at 15% 20%, rgba(77,159,255,0.08) 0%, transparent 60%),
+        radial-gradient(ellipse 60% 50% at 85% 75%, rgba(0,100,200,0.10) 0%, transparent 55%);
+      pointer-events: none;
+      z-index: 0;
+    }
+    body::after {
+      content: '';
+      position: fixed;
+      inset: 0;
+      background-image:
+        linear-gradient(rgba(77,159,255,0.04) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(77,159,255,0.04) 1px, transparent 1px);
+      background-size: 40px 40px;
+      pointer-events: none;
+      z-index: 0;
+    }
+
+    .page-wrapper {
+      position: relative;
+      z-index: 1;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 40px 16px 60px;
+    }
+
+    /* ── Header ── */
+    .header {
+      width: 100%;
+      max-width: 580px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 32px;
+      animation: fadeDown 0.5s ease both;
+    }
+
+    .back-link {
+      align-self: flex-start;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      color: var(--muted);
+      text-decoration: none;
+      font-size: 13px;
+      font-weight: 500;
+      transition: color 0.2s;
+    }
+    .back-link:hover { color: var(--accent); }
+    .back-link svg { width: 14px; height: 14px; }
+
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+    }
+    .logo-icon {
+      width: 52px; height: 52px;
+      border-radius: 14px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      box-shadow: 0 4px 20px rgba(77,159,255,0.35);
+      flex-shrink: 0;
+    }
+    .logo-icon svg { width: 26px; height: 26px; }
+
+    .header-text h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: clamp(22px, 5vw, 28px);
+      font-weight: 700;
+      line-height: 1.15;
+    }
+    .header-text p {
+      font-size: 13px;
+      color: var(--muted);
+      margin-top: 3px;
+    }
+
+    /* ── Card ── */
+    .card {
+      width: 100%;
+      max-width: 580px;
+      background: var(--card-bg);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      padding: 36px 32px;
+      backdrop-filter: blur(18px);
+      -webkit-backdrop-filter: blur(18px);
+      box-shadow: 0 8px 32px rgba(0,0,0,0.3), inset 0 1px 0 rgba(255,255,255,0.06);
+      animation: fadeUp 0.55s 0.1s ease both;
+    }
+
+    @media (max-width: 520px) {
+      .card { padding: 24px 18px; }
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--accent);
+      margin-bottom: 16px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .section-label::after {
+      content: '';
+      flex: 1;
+      height: 1px;
+      background: var(--border);
+    }
+
+    /* ── Search box ── */
+    .search-row {
+      display: flex;
+      gap: 10px;
+    }
+    .search-row input {
+      flex: 1;
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      color: var(--white);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      padding: 13px 16px;
+      outline: none;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      text-transform: uppercase;
+    }
+    .search-row input::placeholder {
+      color: var(--muted);
+      font-weight: 400;
+      text-transform: none;
+      letter-spacing: 0;
+    }
+    .search-row input:focus {
+      border-color: var(--accent);
+      box-shadow: 0 0 0 3px var(--accent-glow);
+    }
+    .search-row input.error-state { border-color: var(--error); }
+
+    .btn-lookup {
+      padding: 13px 22px;
+      background: linear-gradient(135deg, var(--accent) 0%, var(--accent-dark) 100%);
+      border: none;
+      border-radius: 10px;
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      font-weight: 600;
+      cursor: pointer;
+      box-shadow: 0 4px 16px rgba(77,159,255,0.3);
+      transition: transform 0.15s, box-shadow 0.15s, opacity 0.2s;
+      display: flex;
+      align-items: center;
+      gap: 7px;
+      white-space: nowrap;
+    }
+    .btn-lookup:hover:not(:disabled) {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 22px rgba(77,159,255,0.4);
+    }
+    .btn-lookup:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-lookup svg { width: 16px; height: 16px; }
+
+    .hint {
+      font-size: 12px;
+      color: var(--muted);
+      margin-top: 8px;
+    }
+    .hint span {
+      font-weight: 600;
+      color: var(--off-white);
+    }
+
+    .error-msg {
+      display: none;
+      font-size: 12px;
+      color: var(--error);
+      margin-top: 8px;
+    }
+    .error-msg.show { display: block; }
+
+    /* ── Spinner ── */
+    .lookup-spinner {
+      display: none;
+      margin: 32px auto;
+      width: 36px; height: 36px;
+      border: 3px solid rgba(77,159,255,0.2);
+      border-top-color: var(--accent);
+      border-radius: 50%;
+      animation: spin 0.8s linear infinite;
+    }
+    .lookup-spinner.show { display: block; }
+
+    /* ── Result card ── */
+    #result-area {
+      display: none;
+      margin-top: 28px;
+      animation: fadeUp 0.4s ease both;
+    }
+
+    .result-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 20px;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    .ref-id {
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.08em;
+      color: var(--accent);
+      background: rgba(77,159,255,0.1);
+      border: 1px solid rgba(77,159,255,0.25);
+      border-radius: 100px;
+      padding: 5px 14px;
+    }
+
+    /* Status badge */
+    .status-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      padding: 7px 16px;
+      border-radius: 100px;
+      font-size: 13px;
+      font-weight: 700;
+      letter-spacing: 0.04em;
+    }
+    .status-badge .dot {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      flex-shrink: 0;
+    }
+
+    .status-pending   { background: rgba(250,204,21,0.12);  border: 1px solid rgba(250,204,21,0.4);  color: #facc15; }
+    .status-pending   .dot { background: #facc15; box-shadow: 0 0 6px rgba(250,204,21,0.6); animation: pulse 1.5s ease-in-out infinite; }
+    .status-progress  { background: rgba(77,159,255,0.12);  border: 1px solid rgba(77,159,255,0.4);  color: var(--accent); }
+    .status-progress  .dot { background: var(--accent); box-shadow: 0 0 6px rgba(77,159,255,0.6); animation: pulse 1.5s ease-in-out infinite; }
+    .status-done      { background: rgba(74,222,128,0.12);  border: 1px solid rgba(74,222,128,0.4);  color: var(--success); }
+    .status-done      .dot { background: var(--success); }
+    .status-open      { background: rgba(251,146,60,0.12);  border: 1px solid rgba(251,146,60,0.4);  color: var(--orange); }
+    .status-open      .dot { background: var(--orange); box-shadow: 0 0 6px rgba(251,146,60,0.6); animation: pulse 1.5s ease-in-out infinite; }
+    .status-default   { background: rgba(141,164,196,0.12); border: 1px solid rgba(141,164,196,0.3); color: var(--muted); }
+    .status-default   .dot { background: var(--muted); }
+
+    /* Detail rows */
+    .detail-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    @media (max-width: 460px) { .detail-grid { grid-template-columns: 1fr; } }
+
+    .detail-box {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 12px 14px;
+    }
+    .detail-box .d-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 4px;
+    }
+    .detail-box .d-value {
+      font-size: 14px;
+      font-weight: 500;
+      color: var(--off-white);
+    }
+
+    .comments-box {
+      background: var(--input-bg);
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: 14px 16px;
+    }
+    .comments-box .d-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--muted);
+      margin-bottom: 8px;
+    }
+    .comments-box .d-value {
+      font-size: 14px;
+      color: var(--off-white);
+      line-height: 1.6;
+    }
+    .comments-box .no-comments {
+      font-size: 13px;
+      color: var(--muted);
+      font-style: italic;
+    }
+
+    .divider {
+      height: 1px;
+      background: var(--border);
+      margin: 20px 0;
+    }
+
+    .btn-new-search {
+      margin-top: 20px;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      padding: 10px 20px;
+      border: 1px solid var(--border);
+      border-radius: 100px;
+      background: transparent;
+      color: var(--muted);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .btn-new-search:hover { border-color: var(--accent); color: var(--accent); }
+
+    /* ── Not found ── */
+    #not-found {
+      display: none;
+      margin-top: 24px;
+      text-align: center;
+      padding: 28px 16px;
+      animation: fadeUp 0.4s ease both;
+    }
+    #not-found .nf-icon { font-size: 36px; margin-bottom: 10px; }
+    #not-found h3 {
+      font-family: 'Playfair Display', serif;
+      font-size: 20px;
+      margin-bottom: 8px;
+    }
+    #not-found p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+    /* ── Animations ── */
+    @keyframes fadeDown {
+      from { opacity: 0; transform: translateY(-14px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(16px); }
+      to   { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50%       { opacity: 0.4; }
+    }
+  </style>
+</head>
+<body>
+<div class="page-wrapper">
+
+  <!-- Header -->
+  <div class="header">
+    <a href="index.html" class="back-link">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+        <polyline points="15 18 9 12 15 6"/>
+      </svg>
+      Back to Portal
+    </a>
+    <div class="logo-row">
+      <div class="logo-icon">
+        <svg viewBox="0 0 24 24" fill="none" stroke="white" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+      </div>
+      <div class="header-text">
+        <h1>Check Request Status</h1>
+        <p>Smurfit Westrock — Employee Portal</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- Card -->
+  <div class="card">
+    <div class="section-label">Enter Your Reference Number</div>
+
+    <div class="search-row">
+      <input
+        type="text"
+        id="ref-input"
+        placeholder="e.g. MNT-847291 or SAF-392018"
+        maxlength="12"
+        autocomplete="off"
+        spellcheck="false"
+      />
+      <button class="btn-lookup" id="lookup-btn" onclick="lookupStatus()">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
+        </svg>
+        Look up
+      </button>
+    </div>
+    <div class="hint">Format: <span>MNT-XXXXXX</span> for Maintenance · <span>SAF-XXXXXX</span> for Safety</div>
+    <div class="error-msg" id="error-msg">Please enter a valid reference number (e.g. MNT-847291).</div>
+
+    <!-- Spinner -->
+    <div class="lookup-spinner" id="lookup-spinner"></div>
+
+    <!-- Not found -->
+    <div id="not-found">
+      <div class="nf-icon">🔍</div>
+      <h3>Reference Not Found</h3>
+      <p>We couldn't find a request matching that reference number.<br/>Double-check the number from your confirmation email.</p>
+    </div>
+
+    <!-- Result -->
+    <div id="result-area">
+      <div class="divider"></div>
+      <div class="result-header">
+        <div class="ref-id" id="result-ref"></div>
+        <div class="status-badge" id="result-status-badge">
+          <div class="dot"></div>
+          <span id="result-status-text"></span>
+        </div>
+      </div>
+
+      <div class="detail-grid">
+        <div class="detail-box">
+          <div class="d-label">Type</div>
+          <div class="d-value" id="result-type">—</div>
+        </div>
+        <div class="detail-box">
+          <div class="d-label">Submitted</div>
+          <div class="d-value" id="result-date">—</div>
+        </div>
+      </div>
+
+      <div class="comments-box">
+        <div class="d-label">Team Comments</div>
+        <div class="d-value" id="result-comments"></div>
+      </div>
+
+      <button class="btn-new-search" onclick="resetSearch()">
+        ← Search another reference
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+  // ── Config — replace with your Power Automate lookup webhook URL ──
+  const LOOKUP_WEBHOOK_URL = 'YOUR_LOOKUP_WEBHOOK_URL_HERE';
+
+  const refInput    = document.getElementById('ref-input');
+  const errorMsg    = document.getElementById('error-msg');
+  const spinner     = document.getElementById('lookup-spinner');
+  const resultArea  = document.getElementById('result-area');
+  const notFound    = document.getElementById('not-found');
+  const lookupBtn   = document.getElementById('lookup-btn');
+
+  // Auto-format input as uppercase
+  refInput.addEventListener('input', () => {
+    const pos = refInput.selectionStart;
+    refInput.value = refInput.value.toUpperCase();
+    refInput.setSelectionRange(pos, pos);
+    refInput.classList.remove('error-state');
+    errorMsg.classList.remove('show');
+  });
+
+  refInput.addEventListener('keydown', e => {
+    if (e.key === 'Enter') lookupStatus();
+  });
+
+  async function lookupStatus() {
+    const ref = refInput.value.trim().toUpperCase();
+
+    // Validate format
+    if (!/^(MNT|SAF)-\d{6}$/.test(ref)) {
+      refInput.classList.add('error-state');
+      errorMsg.classList.add('show');
+      return;
+    }
+
+    // Reset UI
+    resultArea.style.display = 'none';
+    notFound.style.display   = 'none';
+    errorMsg.classList.remove('show');
+    spinner.classList.add('show');
+    lookupBtn.disabled = true;
+
+    try {
+      const response = await fetch(LOOKUP_WEBHOOK_URL, {
+        method:  'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body:    JSON.stringify({ referenceId: ref })
+      });
+
+      const data = await response.json();
+
+      if (data && data.found) {
+        showResult(ref, data);
+      } else {
+        notFound.style.display = 'block';
+      }
+    } catch (err) {
+      console.error(err);
+      notFound.style.display = 'block';
+    } finally {
+      spinner.classList.remove('show');
+      lookupBtn.disabled = false;
+    }
+  }
+
+  function showResult(ref, data) {
+    // Reference ID
+    document.getElementById('result-ref').textContent = ref;
+
+    // Status badge
+    const badge    = document.getElementById('result-status-badge');
+    const statusTx = document.getElementById('result-status-text');
+    const status   = (data.status || 'Unknown').trim();
+    statusTx.textContent = status;
+    badge.className = 'status-badge ' + getStatusClass(status);
+
+    // Type
+    const typeEl = document.getElementById('result-type');
+    typeEl.textContent = ref.startsWith('MNT') ? 'Maintenance' : 'Safety';
+
+    // Date
+    const dateEl = document.getElementById('result-date');
+    if (data.timestamp) {
+      const d = new Date(data.timestamp);
+      dateEl.textContent = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+    } else {
+      dateEl.textContent = '—';
+    }
+
+    // Comments
+    const commentsEl = document.getElementById('result-comments');
+    const commentKey = ref.startsWith('MNT') ? data.maintenanceComments : data.safetyManagerComments;
+    if (commentKey && commentKey.trim()) {
+      commentsEl.innerHTML = `<span>${escapeHtml(commentKey.trim())}</span>`;
+    } else {
+      commentsEl.innerHTML = `<span class="no-comments">No comments yet — the team will update this as work progresses.</span>`;
+    }
+
+    resultArea.style.display = 'block';
+  }
+
+  function getStatusClass(status) {
+    const s = status.toLowerCase();
+    if (s === 'pending')                    return 'status-pending';
+    if (s.includes('progress'))             return 'status-progress';
+    if (s === 'done' || s === 'resolved' || s === 'closed') return 'status-done';
+    if (s === 'open')                       return 'status-open';
+    return 'status-default';
+  }
+
+  function resetSearch() {
+    refInput.value         = '';
+    resultArea.style.display = 'none';
+    notFound.style.display   = 'none';
+    refInput.focus();
+  }
+
+  function escapeHtml(str) {
+    return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+  }
+</script>
+</body>
+</html>
