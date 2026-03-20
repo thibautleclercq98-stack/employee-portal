@@ -486,19 +486,18 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"/>
       </svg>
-      Back to Portal
+      <span data-en="Back to Portal" data-es="Volver al Portal">Back to Portal</span>
     </a>
 
     <div class="logo-row">
       <div class="logo-icon">
-        <!-- Wrench icon -->
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
           <path d="M14.7 6.3a1 1 0 000 1.4l1.6 1.6a1 1 0 001.4 0l3.77-3.77a6 6 0 01-7.94 7.94l-6.91 6.91a2.12 2.12 0 01-3-3l6.91-6.91a6 6 0 017.94-7.94l-3.76 3.76z"/>
         </svg>
       </div>
       <div class="header-text">
-        <h1>Maintenance Request</h1>
-        <p>Smurfit Westrock — Facility</p>
+        <h1 data-en="Maintenance Request" data-es="Solicitud de Mantenimiento">Maintenance Request</h1>
+        <p data-en="Smurfit Westrock — Facility" data-es="Smurfit Westrock — Instalaciones">Smurfit Westrock — Facility</p>
       </div>
     </div>
   </div>
@@ -508,54 +507,57 @@
     <form id="maint-form" novalidate>
 
       <!-- Section 1: Location -->
-      <div class="section-label">Location &amp; Category</div>
+      <div class="section-label" data-en="Location &amp; Category" data-es="Ubicación y Categoría">Location &amp; Category</div>
       <div class="form-row">
         <div class="field" id="f-department">
-          <label for="department">Department</label>
+          <label for="department" data-en="Department" data-es="Departamento">Department</label>
           <select id="department" name="department">
-            <option value="" disabled selected>Select department…</option>
-            <option>Quality</option>
+            <option value="" disabled selected data-en="Select department…" data-es="Selecciona departamento…">Select department…</option>
+            <option data-en="Quality" data-es="Calidad">Quality</option>
             <option>Injection</option>
             <option>Assembly</option>
-            <option>Shipping &amp; Receiving</option>
-            <option>Warehouse</option>
-            <option>BreakRoom</option>
-            <option>Office / Admin</option>
-            <option>Restroom / Locker</option>
+            <option data-en="Shipping &amp; Receiving" data-es="Envíos y Recepción">Shipping &amp; Receiving</option>
+            <option data-en="Warehouse" data-es="Almacén">Warehouse</option>
+            <option data-en="BreakRoom" data-es="Sala de Descanso">BreakRoom</option>
+            <option data-en="Office / Admin" data-es="Oficina / Administración">Office / Admin</option>
+            <option data-en="Restroom / Locker" data-es="Baño / Casillero">Restroom / Locker</option>
             <option>Facility</option>
-            <option>Other</option>
+            <option data-en="Other" data-es="Otro">Other</option>
           </select>
-          <span class="field-error">Please select a department.</span>
+          <span class="field-error" data-en="Please select a department." data-es="Por favor selecciona un departamento.">Please select a department.</span>
         </div>
 
         <div class="field" id="f-location">
-          <label for="location">Specific Location</label>
-          <input type="text" id="location" name="location" placeholder="e.g. Line 3, Room 201…" />
-          <span class="field-error">Please enter the location.</span>
+          <label for="location" data-en="Specific Location" data-es="Ubicación Específica">Specific Location</label>
+          <input type="text" id="location" name="location"
+            data-en-placeholder="e.g. Line 3, Room 201…"
+            data-es-placeholder="ej. Línea 3, Sala 201…"
+            placeholder="e.g. Line 3, Room 201…" />
+          <span class="field-error" data-en="Please enter the location." data-es="Por favor ingresa la ubicación.">Please enter the location.</span>
         </div>
       </div>
 
       <div class="form-row full section-gap">
         <div class="field" id="f-issueType">
-          <label for="issueType">Issue Type</label>
+          <label for="issueType" data-en="Issue Type" data-es="Tipo de Problema">Issue Type</label>
           <select id="issueType" name="issueType">
-            <option value="" disabled selected>Select issue type…</option>
-            <optgroup label="Facilities">
-              <option>HVAC / Heating &amp; Cooling</option>
-              <option>Air compressor</option>
-              <option>Electrical</option>
-              <option>Plumbing</option>
-              <option>Lighting</option>
-              <option>Doors / Windows / Locks</option>
-              <option>Flooring / Ceiling</option>
-              <option>Janitorial / Cleaning</option>
-              <option>Exterior / Grounds</option>
+            <option value="" disabled selected data-en="Select issue type…" data-es="Selecciona tipo de problema…">Select issue type…</option>
+            <optgroup label="Facilities" data-en="Facilities" data-es="Instalaciones">
+              <option data-en="HVAC / Heating &amp; Cooling" data-es="Climatización / Calefacción">HVAC / Heating &amp; Cooling</option>
+              <option data-en="Air compressor" data-es="Compresor de aire">Air compressor</option>
+              <option data-en="Electrical" data-es="Eléctrico">Electrical</option>
+              <option data-en="Plumbing" data-es="Plomería">Plumbing</option>
+              <option data-en="Lighting" data-es="Iluminación">Lighting</option>
+              <option data-en="Doors / Windows / Locks" data-es="Puertas / Ventanas / Cerraduras">Doors / Windows / Locks</option>
+              <option data-en="Flooring / Ceiling" data-es="Piso / Techo">Flooring / Ceiling</option>
+              <option data-en="Janitorial / Cleaning" data-es="Limpieza / Conserjería">Janitorial / Cleaning</option>
+              <option data-en="Exterior / Grounds" data-es="Exterior / Jardines">Exterior / Grounds</option>
             </optgroup>
-            <optgroup label="Equipment">
-              <option>Production Equipment</option>
-              <option>Conveyor / Material Handling</option>
-              <option>Forklift / Vehicle</option>
-              <option>Safety Equipment</option>
+            <optgroup label="Equipment" data-en="Equipment" data-es="Equipamiento">
+              <option data-en="Production Equipment" data-es="Equipo de Producción">Production Equipment</option>
+              <option data-en="Conveyor / Material Handling" data-es="Transportador / Manejo de Materiales">Conveyor / Material Handling</option>
+              <option data-en="Forklift / Vehicle" data-es="Montacargas / Vehículo">Forklift / Vehicle</option>
+              <option data-en="Safety Equipment" data-es="Equipo de Seguridad">Safety Equipment</option>
             </optgroup>
             <optgroup label="TEST">
               <option>Test / Test2</option>
@@ -563,61 +565,63 @@
               <option>Test5 / Test6</option>
               <option>Test7 / Test8</option>
             </optgroup>
-            <option>Other</option>
+            <option data-en="Other" data-es="Otro">Other</option>
           </select>
-          <span class="field-error">Please select an issue type.</span>
+          <span class="field-error" data-en="Please select an issue type." data-es="Por favor selecciona un tipo de problema.">Please select an issue type.</span>
         </div>
       </div>
 
       <!-- Section 2: Priority -->
-      <div class="section-label section-gap">Priority Level</div>
+      <div class="section-label section-gap" data-en="Priority Level" data-es="Nivel de Prioridad">Priority Level</div>
       <div class="priority-grid" id="priority-grid" role="radiogroup" aria-label="Priority">
         <input type="radio" name="priority" id="p-low"      value="Low"      class="priority-option" />
         <label for="p-low">
           <span class="p-icon">🟢</span>
-          Low<br/><small style="font-size:10px;opacity:.7">Not urgent</small>
+          <span data-en="Low" data-es="Bajo">Low</span><br/><small style="font-size:10px;opacity:.7" data-en="Not urgent" data-es="No urgente">Not urgent</small>
         </label>
 
         <input type="radio" name="priority" id="p-medium"   value="Medium"   class="priority-option" />
         <label for="p-medium">
           <span class="p-icon">🟡</span>
-          Medium<br/><small style="font-size:10px;opacity:.7">This week</small>
+          <span data-en="Medium" data-es="Medio">Medium</span><br/><small style="font-size:10px;opacity:.7" data-en="This week" data-es="Esta semana">This week</small>
         </label>
 
         <input type="radio" name="priority" id="p-high"     value="High"     class="priority-option" />
         <label for="p-high">
           <span class="p-icon">🟠</span>
-          High<br/><small style="font-size:10px;opacity:.7">Today</small>
+          <span data-en="High" data-es="Alto">High</span><br/><small style="font-size:10px;opacity:.7" data-en="Today" data-es="Hoy">Today</small>
         </label>
 
         <input type="radio" name="priority" id="p-critical" value="Critical" class="priority-option" />
         <label for="p-critical">
           <span class="p-icon">🔴</span>
-          Critical<br/><small style="font-size:10px;opacity:.7">Immediate</small>
+          <span data-en="Critical" data-es="Crítico">Critical</span><br/><small style="font-size:10px;opacity:.7" data-en="Immediate" data-es="Inmediato">Immediate</small>
         </label>
       </div>
-      <span class="priority-error" id="priority-error">Please select a priority level.</span>
+      <span class="priority-error" id="priority-error" data-en="Please select a priority level." data-es="Por favor selecciona un nivel de prioridad.">Please select a priority level.</span>
 
       <!-- Section 3: Description -->
-      <div class="section-label section-gap">Details</div>
+      <div class="section-label section-gap" data-en="Details" data-es="Detalles">Details</div>
       <div class="form-row full">
         <div class="field" id="f-description">
-          <label for="description">Description</label>
+          <label for="description" data-en="Description" data-es="Descripción">Description</label>
           <textarea id="description" name="description" rows="4"
+            data-en-placeholder="Describe the issue clearly — what you observed, when it started, any impact on operations…"
+            data-es-placeholder="Describe el problema claramente — qué observaste, cuándo comenzó, impacto en las operaciones…"
             placeholder="Describe the issue clearly — what you observed, when it started, any impact on operations…"></textarea>
-          <span class="field-error">Please describe the issue.</span>
+          <span class="field-error" data-en="Please describe the issue." data-es="Por favor describe el problema.">Please describe the issue.</span>
         </div>
       </div>
 
       <!-- Section 4: Photo & Contact -->
-      <div class="section-label section-gap">Photo &amp; Contact</div>
+      <div class="section-label section-gap" data-en="Photo &amp; Contact" data-es="Foto y Contacto">Photo &amp; Contact</div>
       <div class="form-row full">
         <div class="field">
-          <label>Photo <span class="opt">(optional)</span></label>
+          <label><span data-en="Photo" data-es="Foto">Photo</span> <span class="opt" data-en="(optional)" data-es="(opcional)">(optional)</span></label>
           <div class="photo-zone" id="photo-zone">
             <input type="file" id="photo-input" accept="image/*" capture="environment" />
             <div class="upload-icon">📷</div>
-            <p><strong>Tap to attach a photo</strong><br />or drag &amp; drop here · JPG, PNG, HEIC</p>
+            <p><strong data-en="Tap to attach a photo" data-es="Toca para adjuntar una foto">Tap to attach a photo</strong><br /><span data-en="or drag &amp; drop here · JPG, PNG, HEIC" data-es="o arrastra aquí · JPG, PNG, HEIC">or drag &amp; drop here · JPG, PNG, HEIC</span></p>
             <div class="file-name" id="file-name-display"></div>
           </div>
           <img id="preview-img" class="preview-img" alt="Preview" />
@@ -626,9 +630,12 @@
 
       <div class="form-row full" style="margin-top:14px;">
         <div class="field" id="f-email">
-          <label for="email">Your Email <span class="opt">(for confirmation)</span></label>
-          <input type="email" id="email" name="email" placeholder="your.name@smurfitwrk.com" />
-          <span class="field-error">Please enter a valid email address.</span>
+          <label for="email"><span data-en="Your Email" data-es="Tu Correo Electrónico">Your Email</span> <span class="opt" data-en="(for confirmation)" data-es="(para confirmación)">(for confirmation)</span></label>
+          <input type="email" id="email" name="email"
+            data-en-placeholder="your.name@smurfitwrk.com"
+            data-es-placeholder="tu.nombre@smurfitwrk.com"
+            placeholder="your.name@smurfitwrk.com" />
+          <span class="field-error" data-en="Please enter a valid email address." data-es="Por favor ingresa un correo válido.">Please enter a valid email address.</span>
         </div>
       </div>
 
@@ -639,7 +646,7 @@
             <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
           </svg>
           <div class="spinner" id="spinner"></div>
-          <span id="btn-text">Submit Maintenance Request</span>
+          <span id="btn-text" data-en="Submit Maintenance Request" data-es="Enviar Solicitud de Mantenimiento">Submit Maintenance Request</span>
         </button>
       </div>
 
@@ -654,12 +661,12 @@
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <h2>Request Submitted!</h2>
-      <p>Your maintenance request has been logged and routed to the Facility team.</p>
+      <h2 data-en="Request Submitted!" data-es="¡Solicitud Enviada!">Request Submitted!</h2>
+      <p data-en="Your maintenance request has been logged and routed to the Facility team." data-es="Tu solicitud de mantenimiento ha sido registrada y enviada al equipo de Instalaciones.">Your maintenance request has been logged and routed to the Facility team.</p>
       <div class="ref-badge" id="ref-display">MNT-XXXXXX</div>
-      <div class="success-note">Save this reference number. You'll receive a confirmation email shortly.</div>
+      <div class="success-note" data-en="Save this reference number. You'll receive a confirmation email shortly." data-es="Guarda este número de referencia. Recibirás un correo de confirmación en breve.">Save this reference number. You'll receive a confirmation email shortly.</div>
       <br/>
-      <a href="index.html" class="btn-new">
+      <a href="index.html" class="btn-new" data-en="← Back to Employee Portal" data-es="← Volver al Portal">
         ← Back to Employee Portal
       </a>
     </div>
@@ -822,5 +829,6 @@
     r.addEventListener('change', () => priorityError.classList.remove('show'));
   });
 </script>
+<script src="lang.js"></script>
 </body>
 </html>
