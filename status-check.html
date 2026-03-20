@@ -417,7 +417,7 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"/>
       </svg>
-      Back to Portal
+      <span data-en="Back to Portal" data-es="Volver al Portal">Back to Portal</span>
     </a>
     <div class="logo-row">
       <div class="logo-icon">
@@ -426,21 +426,23 @@
         </svg>
       </div>
       <div class="header-text">
-        <h1>Check Request Status</h1>
-        <p>Smurfit Westrock — Employee Portal</p>
+        <h1 data-en="Check Request Status" data-es="Verificar Estado de Solicitud">Check Request Status</h1>
+        <p data-en="Smurfit Westrock — Employee Portal" data-es="Smurfit Westrock — Portal del Empleado">Smurfit Westrock — Employee Portal</p>
       </div>
     </div>
   </div>
 
   <!-- Card -->
   <div class="card">
-    <div class="section-label">Enter Your Reference Number</div>
+    <div class="section-label" data-en="Enter Your Reference Number" data-es="Ingresa Tu Número de Referencia">Enter Your Reference Number</div>
 
     <div class="search-row">
       <input
         type="text"
         id="ref-input"
-        placeholder="e.g. MNT-847291 or SAF-392018"
+        data-en-placeholder="e.g. MNT-847291, SAF-392018 or SUG-123456"
+        data-es-placeholder="ej. MNT-847291, SAF-392018 o SUG-123456"
+        placeholder="e.g. MNT-847291, SAF-392018 or SUG-123456"
         maxlength="12"
         autocomplete="off"
         spellcheck="false"
@@ -449,11 +451,11 @@
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
           <circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/>
         </svg>
-        Look up
+        <span data-en="Look up" data-es="Buscar">Look up</span>
       </button>
     </div>
-    <div class="hint">Format: <span>MNT-XXXXXX</span> for Maintenance · <span>SAF-XXXXXX</span> for Safety</div>
-    <div class="error-msg" id="error-msg">Please enter a valid reference number (e.g. MNT-847291).</div>
+    <div class="hint" data-en="Format: <span>MNT-XXXXXX</span> · <span>SAF-XXXXXX</span> · <span>SUG-XXXXXX</span>" data-es="Formato: <span>MNT-XXXXXX</span> · <span>SAF-XXXXXX</span> · <span>SUG-XXXXXX</span>">Format: <span>MNT-XXXXXX</span> · <span>SAF-XXXXXX</span> · <span>SUG-XXXXXX</span></div>
+    <div class="error-msg" id="error-msg" data-en="Please enter a valid reference number (e.g. MNT-847291)." data-es="Por favor ingresa un número de referencia válido (ej. MNT-847291).">Please enter a valid reference number (e.g. MNT-847291).</div>
 
     <!-- Spinner -->
     <div class="lookup-spinner" id="lookup-spinner"></div>
@@ -461,8 +463,8 @@
     <!-- Not found -->
     <div id="not-found">
       <div class="nf-icon">🔍</div>
-      <h3>Reference Not Found</h3>
-      <p>We couldn't find a request matching that reference number.<br/>Double-check the number from your confirmation email.</p>
+      <h3 data-en="Reference Not Found" data-es="Referencia No Encontrada">Reference Not Found</h3>
+      <p data-en="We couldn't find a request matching that reference number.<br/>Double-check the number from your confirmation email." data-es="No encontramos una solicitud con ese número de referencia.<br/>Verifica el número en tu correo de confirmación.">We couldn't find a request matching that reference number.<br/>Double-check the number from your confirmation email.</p>
     </div>
 
     <!-- Result -->
@@ -478,21 +480,21 @@
 
       <div class="detail-grid">
         <div class="detail-box">
-          <div class="d-label">Type</div>
+          <div class="d-label" data-en="Type" data-es="Tipo">Type</div>
           <div class="d-value" id="result-type">—</div>
         </div>
         <div class="detail-box">
-          <div class="d-label">Submitted</div>
+          <div class="d-label" data-en="Submitted" data-es="Enviado">Submitted</div>
           <div class="d-value" id="result-date">—</div>
         </div>
       </div>
 
       <div class="comments-box">
-        <div class="d-label">Team Comments</div>
+        <div class="d-label" data-en="Team Comments" data-es="Comentarios del Equipo">Team Comments</div>
         <div class="d-value" id="result-comments"></div>
       </div>
 
-      <button class="btn-new-search" onclick="resetSearch()">
+      <button class="btn-new-search" onclick="resetSearch()" data-en="← Search another reference" data-es="← Buscar otra referencia">
         ← Search another reference
       </button>
     </div>
@@ -527,8 +529,8 @@
   async function lookupStatus() {
     const ref = refInput.value.trim().toUpperCase();
 
-    // Validate format
-    if (!/^(MNT|SAF)-\d{6}$/.test(ref)) {
+    // Validate format — now includes SUG
+    if (!/^(MNT|SAF|SUG)-\d{6}$/.test(ref)) {
       refInput.classList.add('error-state');
       errorMsg.classList.add('show');
       return;
@@ -577,24 +579,39 @@
 
     // Type
     const typeEl = document.getElementById('result-type');
-    typeEl.textContent = ref.startsWith('MNT') ? 'Maintenance' : 'Safety';
+    const lang = localStorage.getItem('portalLang') || 'en';
+    if (ref.startsWith('MNT')) {
+      typeEl.textContent = lang === 'es' ? 'Mantenimiento' : 'Maintenance';
+    } else if (ref.startsWith('SAF')) {
+      typeEl.textContent = lang === 'es' ? 'Seguridad' : 'Safety';
+    } else {
+      typeEl.textContent = lang === 'es' ? 'Sugerencia' : 'Suggestion';
+    }
 
     // Date
     const dateEl = document.getElementById('result-date');
     if (data.timestamp) {
       const d = new Date(data.timestamp);
-      dateEl.textContent = d.toLocaleDateString('en-GB', { day:'2-digit', month:'short', year:'numeric' });
+      dateEl.textContent = d.toLocaleDateString(lang === 'es' ? 'es-MX' : 'en-GB', { day:'2-digit', month:'short', year:'numeric' });
     } else {
       dateEl.textContent = '—';
     }
 
     // Comments
     const commentsEl = document.getElementById('result-comments');
-    const commentKey = ref.startsWith('MNT') ? data.maintenanceComments : data.safetyManagerComments;
+    let commentKey;
+    if (ref.startsWith('MNT'))       commentKey = data.maintenanceComments;
+    else if (ref.startsWith('SAF'))  commentKey = data.safetyManagerComments;
+    else                             commentKey = data.managerComments;
+
+    const noCommentsText = lang === 'es'
+      ? 'Sin comentarios aún — el equipo actualizará esto conforme avance.'
+      : 'No comments yet — the team will update this as work progresses.';
+
     if (commentKey && commentKey.trim()) {
       commentsEl.innerHTML = `<span>${escapeHtml(commentKey.trim())}</span>`;
     } else {
-      commentsEl.innerHTML = `<span class="no-comments">No comments yet — the team will update this as work progresses.</span>`;
+      commentsEl.innerHTML = `<span class="no-comments">${noCommentsText}</span>`;
     }
 
     resultArea.style.display = 'block';
@@ -620,5 +637,6 @@
     return str.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
   }
 </script>
+<script src="lang.js"></script>
 </body>
 </html>
