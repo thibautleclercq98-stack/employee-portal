@@ -481,13 +481,13 @@
       <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
         <polyline points="15 18 9 12 15 6"/>
       </svg>
-      Back to Portal
+      <span data-en="Back to Portal" data-es="Volver al Portal">Back to Portal</span>
     </a>
     <div class="logo-row">
       <div class="logo-icon">💡</div>
       <div class="header-text">
-        <h1>Employee Suggestion</h1>
-        <p>Share an idea · Anonymous or identified</p>
+        <h1 data-en="Employee Suggestion" data-es="Sugerencia de Empleado">Employee Suggestion</h1>
+        <p data-en="Share an idea · Anonymous or identified" data-es="Comparte una idea · Anónimo o identificado">Share an idea · Anonymous or identified</p>
       </div>
     </div>
   </div>
@@ -497,73 +497,87 @@
     <form id="suggestion-form" novalidate>
 
       <!-- Section 1: Department & Category -->
-      <div class="section-label">Your Idea</div>
+      <div class="section-label" data-en="Your Idea" data-es="Tu Idea">Your Idea</div>
       <div class="form-row">
         <div class="field" id="f-department">
-          <label for="department">Department</label>
+          <label for="department" data-en="Department" data-es="Departamento">Department</label>
           <select id="department" name="department">
-            <option value="" disabled selected>Select department…</option>
-            <option>Quality</option>
+            <option value="" disabled selected data-en="Select department…" data-es="Selecciona departamento…">Select department…</option>
+            <option data-en="Quality" data-es="Calidad">Quality</option>
             <option>Injection</option>
             <option>Mold</option>
             <option>Assembly</option>
-            <option>Warehouse</option>
+            <option data-en="Warehouse" data-es="Almacén">Warehouse</option>
             <option>Facility</option>
-            <option>Common Areas</option>
-            <option>Other</option>
+            <option data-en="Common Areas" data-es="Áreas Comunes">Common Areas</option>
+            <option data-en="Maintenance" data-es="Mantenimiento">Maintenance</option>
+            <option data-en="Safety &amp; Environment" data-es="Seguridad y Medio Ambiente">Safety &amp; Environment</option>
+            <option data-en="Logistics" data-es="Logística">Logistics</option>
+            <option data-en="Finance" data-es="Finanzas">Finance</option>
+            <option data-en="Human Resources" data-es="Recursos Humanos">Human Resources</option>
+            <option>IT</option>
+            <option data-en="Management" data-es="Gerencia">Management</option>
+            <option data-en="Other" data-es="Otro">Other</option>
           </select>
-          <span class="field-error">Please select your department.</span>
+          <span class="field-error" data-en="Please select your department." data-es="Por favor selecciona tu departamento.">Please select your department.</span>
         </div>
 
         <div class="field" id="f-category">
-          <label for="category">Category</label>
+          <label for="category" data-en="Category" data-es="Categoría">Category</label>
           <select id="category" name="category">
-            <option value="" disabled selected>Select category…</option>
-            <option>Safety</option>
-            <option>Cost Saving</option>
-            <option>Process Improvement</option>
-            <option>People Wellness / Culture</option>
-            <option>Environment</option>
-            <option>Technology</option>
-            <option>Other</option>
+            <option value="" disabled selected data-en="Select category…" data-es="Selecciona categoría…">Select category…</option>
+            <option data-en="Safety" data-es="Seguridad">Safety</option>
+            <option data-en="Cost Saving" data-es="Ahorro de Costos">Cost Saving</option>
+            <option data-en="Process Improvement" data-es="Mejora de Proceso">Process Improvement</option>
+            <option data-en="People Wellness / Culture" data-es="Bienestar / Cultura">People Wellness / Culture</option>
+            <option data-en="Environment" data-es="Medio Ambiente">Environment</option>
+            <option data-en="Technology" data-es="Tecnología">Technology</option>
+            <option data-en="Other" data-es="Otro">Other</option>
           </select>
-          <span class="field-error">Please select a category.</span>
+          <span class="field-error" data-en="Please select a category." data-es="Por favor selecciona una categoría.">Please select a category.</span>
         </div>
       </div>
 
       <!-- Section 2: Suggestion -->
-      <div class="section-label section-gap">Your Suggestion</div>
+      <div class="section-label section-gap" data-en="Your Suggestion" data-es="Tu Sugerencia">Your Suggestion</div>
       <div class="form-row full">
         <div class="field" id="f-suggestion">
-          <label for="suggestion">Suggestion</label>
+          <label for="suggestion" data-en="Suggestion" data-es="Sugerencia">Suggestion</label>
           <textarea id="suggestion" name="suggestion" rows="5"
-            placeholder="Describe your idea in detail — How would it work?"></textarea>
+            data-en-placeholder="Describe your idea in detail — what problem does it solve, how would it work, and what would the benefit be?"
+            data-es-placeholder="Describe tu idea en detalle — ¿qué problema resuelve, cómo funcionaría y cuál sería el beneficio?"
+            placeholder="Describe your idea in detail — what problem does it solve, how would it work, and what would the benefit be?"></textarea>
           <div class="char-counter">
-            <span>Characters:</span>
+            <span data-en="Characters:" data-es="Caracteres:">Characters:</span>
             <span class="count" id="char-count">0</span>
-            <span>· minimum 20</span>
+            <span data-en="· minimum 20" data-es="· mínimo 20">· minimum 20</span>
           </div>
-          <span class="field-error" id="suggestion-error">Please enter at least 20 characters.</span>
+          <span class="field-error" id="suggestion-error" data-en="Please enter at least 20 characters." data-es="Por favor ingresa al menos 20 caracteres.">Please enter at least 20 characters.</span>
         </div>
       </div>
 
       <!-- Estimated Benefit -->
       <div class="form-row full" style="margin-top:14px;">
         <div class="field" id="f-benefit">
-          <label for="benefit">Estimated Benefit <span class="opt">(optional)</span></label>
+          <label for="benefit"><span data-en="Estimated Benefit" data-es="Beneficio Estimado">Estimated Benefit</span> <span class="opt" data-en="(optional)" data-es="(opcional)">(optional)</span></label>
           <textarea id="benefit" name="benefit" rows="3"
+            data-en-placeholder="What improvement, saving, or impact do you expect? e.g. reduce downtime by 20%, save ~$5k/year, improve team morale…"
+            data-es-placeholder="¿Qué mejora, ahorro o impacto esperas? ej. reducir tiempo muerto 20%, ahorrar ~$5k/año, mejorar el ambiente…"
             placeholder="What improvement, saving, or impact do you expect? e.g. reduce downtime by 20%, save ~$5k/year, improve team morale…"></textarea>
         </div>
       </div>
 
       <!-- Section: Photo -->
-      <div class="section-label section-gap">Photo <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;color:var(--muted);margin-left:4px;">(optional)</span></div>
+      <div class="section-label section-gap">
+        <span data-en="Photo" data-es="Foto">Photo</span>
+        <span style="font-weight:300;text-transform:none;letter-spacing:0;font-size:10px;color:var(--muted);margin-left:4px;" data-en="(optional)" data-es="(opcional)">(optional)</span>
+      </div>
       <div class="form-row full">
         <div class="field">
           <div class="photo-zone" id="photo-zone">
             <input type="file" id="photo-input" accept="image/*" capture="environment" />
             <div class="upload-icon">📷</div>
-            <p><strong>Tap to attach a photo</strong><br/>or drag &amp; drop here · JPG, PNG, HEIC</p>
+            <p><strong data-en="Tap to attach a photo" data-es="Toca para adjuntar una foto">Tap to attach a photo</strong><br/><span data-en="or drag &amp; drop here · JPG, PNG, HEIC" data-es="o arrastra aquí · JPG, PNG, HEIC">or drag &amp; drop here · JPG, PNG, HEIC</span></p>
             <div class="file-name" id="file-name-display"></div>
           </div>
           <img id="preview-img" class="preview-img" alt="Preview" />
@@ -571,44 +585,47 @@
       </div>
 
       <!-- Section 3: Anonymity -->
-      <div class="section-label section-gap">Identity</div>
+      <div class="section-label section-gap" data-en="Identity" data-es="Identidad">Identity</div>
 
       <div class="field" id="f-anon">
-        <label>Submit Anonymously?</label>
+        <label data-en="Submit Anonymously?" data-es="¿Enviar Anónimamente?">Submit Anonymously?</label>
         <div class="anon-grid" id="anon-grid">
           <div class="anon-option">
             <input type="radio" name="anonymous" id="anon-yes" value="Yes" />
             <label class="anon-label" for="anon-yes">
               <span class="anon-emoji">🔒</span>
-              <span class="anon-title">Yes, anonymously</span>
-              <span class="anon-sub">Your identity is fully protected</span>
+              <span class="anon-title" data-en="Yes, anonymously" data-es="Sí, anónimamente">Yes, anonymously</span>
+              <span class="anon-sub" data-en="Your identity is fully protected" data-es="Tu identidad está completamente protegida">Your identity is fully protected</span>
             </label>
           </div>
           <div class="anon-option">
             <input type="radio" name="anonymous" id="anon-no" value="No" />
             <label class="anon-label" for="anon-no">
               <span class="anon-emoji">👤</span>
-              <span class="anon-title">No, include my name</span>
-              <span class="anon-sub">I want follow up by email</span>
+              <span class="anon-title" data-en="No, include my name" data-es="No, incluir mi nombre">No, include my name</span>
+              <span class="anon-sub" data-en="We'll follow up by email" data-es="Te contactaremos por correo">We'll follow up by email</span>
             </label>
           </div>
         </div>
-        <div id="anon-error">Please select an option.</div>
+        <div id="anon-error" data-en="Please select an option." data-es="Por favor selecciona una opción.">Please select an option.</div>
       </div>
 
       <!-- Email (hidden until "No" selected) -->
       <div id="email-field-wrap">
         <div class="field" id="f-email">
-          <label for="email">Your Email</label>
-          <input type="email" id="email" name="email" placeholder="your.name@smurfitwestrock.com" />
-          <span class="field-error">Please enter a valid email address.</span>
+          <label for="email" data-en="Your Email" data-es="Tu Correo Electrónico">Your Email</label>
+          <input type="email" id="email" name="email"
+            data-en-placeholder="your.name@smurfitwestrock.com"
+            data-es-placeholder="tu.nombre@smurfitwestrock.com"
+            placeholder="your.name@smurfitwestrock.com" />
+          <span class="field-error" data-en="Please enter a valid email address." data-es="Por favor ingresa un correo válido.">Please enter a valid email address.</span>
         </div>
       </div>
 
       <!-- Privacy notice -->
       <div class="privacy-notice">
         <span class="lock">🔒</span>
-        <span>Anonymous submissions are completely private. Your identity cannot be traced and will never be shared with anyone.</span>
+        <span data-en="Anonymous submissions are completely private. Your identity cannot be traced and will never be shared with anyone." data-es="Las sugerencias anónimas son completamente privadas. Tu identidad no puede ser rastreada ni compartida con nadie.">Anonymous submissions are completely private. Your identity cannot be traced and will never be shared with anyone.</span>
       </div>
 
       <!-- Submit -->
@@ -618,7 +635,7 @@
             <line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/>
           </svg>
           <div class="spinner" id="spinner"></div>
-          <span id="btn-text">Submit Suggestion</span>
+          <span id="btn-text" data-en="Submit Suggestion" data-es="Enviar Sugerencia">Submit Suggestion</span>
         </button>
       </div>
 
@@ -633,14 +650,14 @@
           <polyline points="20 6 9 17 4 12"/>
         </svg>
       </div>
-      <h2>Suggestion Received!</h2>
-      <p>Thank you for helping us improve. Your idea has been logged<br/>and routed to the right team.</p>
+      <h2 data-en="Suggestion Received!" data-es="¡Sugerencia Recibida!">Suggestion Received!</h2>
+      <p data-en="Thank you for helping us improve. Your idea has been logged<br/>and routed to the right team." data-es="Gracias por ayudarnos a mejorar. Tu idea ha sido registrada<br/>y enviada al equipo correspondiente.">Thank you for helping us improve. Your idea has been logged<br/>and routed to the right team.</p>
       <div class="ref-badge" id="ref-display">SUG-XXXXXX</div>
-      <p class="success-note">⏱ We'll respond within <strong>5 business days</strong>.<br/>Keep this reference number for any follow-up queries.</p>
+      <p class="success-note" data-en="⏱ We'll respond within <strong>5 business days</strong>.<br/>Keep this reference number for any follow-up queries." data-es="⏱ Responderemos dentro de <strong>5 días hábiles</strong>.<br/>Guarda este número de referencia para cualquier consulta.">⏱ We'll respond within <strong>5 business days</strong>.<br/>Keep this reference number for any follow-up queries.</p>
       <div class="success-anon-note" id="success-anon-note"></div>
       <div class="btn-new-row">
-        <button class="btn-new" onclick="resetForm()">Submit another idea</button>
-        <a href="index.html" class="btn-new">← Back to Portal</a>
+        <button class="btn-new" data-en="Submit another idea" data-es="Enviar otra idea" onclick="resetForm()">Submit another idea</button>
+        <a href="index.html" class="btn-new" data-en="← Back to Portal" data-es="← Volver al Portal">← Back to Portal</a>
       </div>
     </div>
   </div>
@@ -648,7 +665,7 @@
 </div>
 
 <script>
-  const WEBHOOK_URL = 'https://default67d2558fa4af4478bc72d7585f436b.ad.environment.api.powerplatform.com:443/powerautomate/automations/direct/workflows/6b654df33fca41bdaf7c628ed9085f7d/triggers/manual/paths/invoke?api-version=1&sp=%2Ftriggers%2Fmanual%2Frun&sv=1.0&sig=dumPuIrO3IddXINz2939pOEBOvszwSitSMOZcWz7_bo';
+  const WEBHOOK_URL = 'YOUR_POWER_AUTOMATE_WEBHOOK_URL_HERE';
 
   const form          = document.getElementById('suggestion-form');
   const formCard      = document.getElementById('form-card');
@@ -801,10 +818,17 @@
     }
 
     // Build success screen
+    const lang = localStorage.getItem('portalLang') || 'en';
     refDisplay.textContent = refId;
-    successAnon.textContent = isAnon === 'Yes'
-      ? '🔒 Your identity is fully protected — this submission is completely anonymous.'
-      : '📧 Check your email for a confirmation and follow-up from our team.';
+    if (isAnon === 'Yes') {
+      successAnon.textContent = lang === 'es'
+        ? '🔒 Tu identidad está completamente protegida — este envío es totalmente anónimo.'
+        : '🔒 Your identity is fully protected — this submission is completely anonymous.';
+    } else {
+      successAnon.textContent = lang === 'es'
+        ? '📧 Revisa tu correo electrónico para la confirmación y seguimiento de nuestro equipo.'
+        : '📧 Check your email for a confirmation and follow-up from our team.';
+    }
 
     formCard.style.display   = 'none';
     successScr.style.display = 'block';
@@ -839,5 +863,5 @@
     window.scrollTo(0, 0);
   }
 </script>
+<script src="lang.js"></script>
 </body>
-</html>
