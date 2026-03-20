@@ -591,12 +591,24 @@
     // Date
     const dateEl = document.getElementById('result-date');
 if (data.timestamp) {
-  const d = new Date(data.timestamp);
-  if (!isNaN(d)) {
-    dateEl.textContent = d.toLocaleDateString(lang === 'es' ? 'es-MX' : 'en-GB', { day:'2-digit', month:'short', year:'numeric' });
+  const raw = String(data.timestamp).trim();
+  let d;
+
+  if (!isNaN(parseFloat(raw)) && isFinite(raw)) {
+    // Excel serial number → real date
+    d = new Date((parseFloat(raw) - 25569) * 86400 * 1000);
   } else {
-    dateEl.textContent = data.timestamp; // just show it raw if parsing fails
+    d = new Date(raw);
   }
+
+  const lang = localStorage.getItem('portalLang') || 'en';
+
+  dateEl.textContent = isNaN(d)
+    ? raw
+    : d.toLocaleDateString(
+        lang === 'es' ? 'es-MX' : 'en-GB',
+        { day: '2-digit', month: 'short', year: 'numeric' }
+      );
 } else {
   dateEl.textContent = '—';
 }
