@@ -440,6 +440,32 @@
       color: var(--muted);
       margin-top: 6px;
     }
+
+    /* SMS / video note */
+    .sms-note {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin: 16px auto 0;
+      padding: 12px 16px;
+      background: rgba(77,159,255,0.07);
+      border: 1px solid rgba(77,159,255,0.18);
+      border-radius: 12px;
+      font-size: 13px;
+      color: var(--muted);
+      line-height: 1.55;
+      text-align: left;
+      max-width: 360px;
+    }
+    .sms-note .sms-icon { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+    .sms-note a {
+      color: var(--accent);
+      font-weight: 600;
+      text-decoration: none;
+      white-space: nowrap;
+    }
+    .sms-note a:hover { text-decoration: underline; }
+
     .btn-new {
       margin-top: 28px;
       display: inline-flex;
@@ -663,12 +689,13 @@
       </div>
       <h2 data-en="Request Submitted!" data-es="¡Solicitud Enviada!">Request Submitted!</h2>
       <p data-en="Your maintenance request has been logged and routed to the Facility team." data-es="Tu solicitud de mantenimiento ha sido registrada y enviada al equipo de Instalaciones.">Your maintenance request has been logged and routed to the Facility team.</p>
-      <div class="ref-badge" id="ref-display">MNT-XXXXXX</div>
+      <div class="ref-badge" id="ref-display">MNT-0001</div>
       <div class="success-note" data-en="Save this reference number. You'll receive a confirmation email shortly." data-es="Guarda este número de referencia. Recibirás un correo de confirmación en breve.">Save this reference number. You'll receive a confirmation email shortly.</div>
-      <br/>
-      <a href="index.html" class="btn-new" data-en="← Back to Employee Portal" data-es="← Volver al Portal">
-        ← Back to Employee Portal
-      </a>
+      <div class="sms-note">
+        <span class="sms-icon">📹</span>
+        <span data-en="Need to send additional information like videos? Text us at <a href='sms:+19409232744'>+1 (940) 923-2744</a>" data-es="¿Necesitas enviar información adicional como videos? Envía un mensaje a <a href='sms:+19409232744'>+1 (940) 923-2744</a>">Need to send additional information like videos? Text us at <a href="sms:+19409232744">+1 (940) 923-2744</a></span>
+      </div>
+      <a href="index.html" class="btn-new" data-en="← Back to Employee Portal" data-es="← Volver al Portal">← Back to Employee Portal</a>
     </div>
   </div>
 
@@ -777,10 +804,7 @@
 
     if (!validateForm()) return;
 
-    const referenceId = 'MNT-' + Math.floor(100000 + Math.random() * 900000);
-
     const payload = {
-      referenceId,
       department:  document.getElementById('department').value,
       location:    document.getElementById('location').value.trim(),
       issueType:   document.getElementById('issueType').value,
@@ -797,21 +821,25 @@
     spinner.style.display = 'block';
     btnText.textContent = 'Submitting…';
 
+    let referenceId = 'MNT-????'; // fallback if response fails
     try {
-      await fetch(WEBHOOK_URL, {
+      const res  = await fetch(WEBHOOK_URL, {
         method:  'POST',
         headers: { 'Content-Type': 'application/json' },
         body:    JSON.stringify(payload)
       });
+      // Power Automate should return: { "referenceId": "MNT-0042" }
+      const data = await res.json();
+      if (data && data.referenceId) referenceId = data.referenceId;
     } catch (err) {
       console.warn('Webhook error:', err);
-      // Still show success — Power Automate sometimes closes the connection early
+      // Still show success screen even if network fails
     }
 
-    // success
-    refDisplay.textContent = referenceId;
+    refDisplay.textContent   = referenceId;
     formCard.style.display   = 'none';
     successScr.style.display = 'block';
+    window.scrollTo(0, 0);
   });
 
   // ── Clear invalid on input ────────────────────────────────────
