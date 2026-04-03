@@ -565,35 +565,81 @@
 
       <div class="form-row full section-gap">
         <div class="field" id="f-issueType">
-          <label for="issueType" data-en="Issue Type" data-es="Tipo de Problema">Issue Type</label>
+          <label for="issueType" data-en="Equipment" data-es="Equipo">Equipment</label>
           <select id="issueType" name="issueType">
-            <option value="" disabled selected data-en="Select issue type…" data-es="Selecciona tipo de problema…">Select issue type…</option>
-            <optgroup label="Facilities" data-en="Facilities" data-es="Instalaciones">
-              <option data-en="HVAC / Heating &amp; Cooling" data-es="Climatización / Calefacción">HVAC / Heating &amp; Cooling</option>
-              <option data-en="Air compressor" data-es="Compresor de aire">Air compressor</option>
-              <option data-en="Electrical" data-es="Eléctrico">Electrical</option>
-              <option data-en="Plumbing" data-es="Plomería">Plumbing</option>
-              <option data-en="Lighting" data-es="Iluminación">Lighting</option>
-              <option data-en="Doors / Windows / Locks" data-es="Puertas / Ventanas / Cerraduras">Doors / Windows / Locks</option>
-              <option data-en="Flooring / Ceiling" data-es="Piso / Techo">Flooring / Ceiling</option>
-              <option data-en="Janitorial / Cleaning" data-es="Limpieza / Conserjería">Janitorial / Cleaning</option>
-              <option data-en="Exterior / Grounds" data-es="Exterior / Jardines">Exterior / Grounds</option>
+            <option value="" disabled selected data-en="Select equipment…" data-es="Selecciona equipo…">Select equipment…</option>
+
+            <optgroup label="🌡️ Cooling &amp; HVAC" data-en="Cooling &amp; HVAC" data-es="Enfriamiento y Climatización">
+              <option>Pump skid cooling loop (PT-01)</option>
+              <option>Cooling tower 10F (CT-01)</option>
+              <option>Cooling tower 5FA (CT-02A)</option>
+              <option>Cooling tower 5FB (CT-02B)</option>
+              <option>AC-Chiller (C-01)</option>
+              <option>AC-Chiller (C-02)</option>
+              <option>Chiller Pump 1 (CB-01)</option>
+              <option>Chiller Pump 2 (CB-02)</option>
+              <option>Air Handler 1 (AH-01)</option>
+              <option>Air Handler 2 (AH-02)</option>
+              <option>Air Handler 3 (AH-03)</option>
+              <option>Air Handler 4 (AH-04)</option>
+              <option>Air Handler 5 (AH-05)</option>
+              <option>Air Handler 6 (AH-06)</option>
+              <option>Air Handler 7 (AH-07)</option>
+              <option>Rooftop unit HVAC Office (RTU-01)</option>
+              <option>Rooftop unit HVAC Quality lab (RTU-02)</option>
+              <option>Mini Split IT Room (MSP-01)</option>
+              <option>Mini Split Shipping (MSP-02)</option>
+              <option>Mini Split Meeting Room (MSP-03)</option>
+              <option>Mini Split Project Office (MSP-04)</option>
             </optgroup>
-            <optgroup label="Equipment" data-en="Equipment" data-es="Equipamiento">
-              <option data-en="Production Equipment" data-es="Equipo de Producción">Production Equipment</option>
-              <option data-en="Conveyor / Material Handling" data-es="Transportador / Manejo de Materiales">Conveyor / Material Handling</option>
-              <option data-en="Forklift / Vehicle" data-es="Montacargas / Vehículo">Forklift / Vehicle</option>
-              <option data-en="Safety Equipment" data-es="Equipo de Seguridad">Safety Equipment</option>
+
+            <optgroup label="💨 Air Systems" data-en="Air Systems" data-es="Sistemas de Aire">
+              <option>Air compressor 1 (AC-01)</option>
+              <option>Air compressor 2 (AC-02)</option>
+              <option>Air compressor 3 (AC-03)</option>
+              <option>Air Dryer (DR-01)</option>
             </optgroup>
-            <optgroup label="TEST">
-              <option>Test / Test2</option>
-              <option>Test3 / Test4</option>
-              <option>Test5 / Test6</option>
-              <option>Test7 / Test8</option>
+
+            <optgroup label="⚙️ Production Equipment" data-en="Production Equipment" data-es="Equipo de Producción">
+              <option>Debagging Machine (DM-01)</option>
+              <option>Debagging Machine Vacuum pump (DMV-01)</option>
+              <option>Rail Car pump (RCP-01)</option>
+              <option>Wrapping Machine 2 (WM-02)</option>
+              <option>Box Machine EndFlex (BM-01)</option>
             </optgroup>
+
+            <optgroup label="🚪 Automatic Roll-Up Doors" data-en="Automatic Roll-Up Doors" data-es="Puertas Enrollables Automáticas">
+              <option>Roll-up door North 1 (N1)</option>
+              <option>Roll-up door North 2 (N2)</option>
+              <option>Roll-up door East 1 (E1)</option>
+              <option>Roll-up door West 1 (W1)</option>
+              <option>Roll-up door West 2 (W2)</option>
+              <option>Roll-up door West 3 (W3)</option>
+            </optgroup>
+
+            <optgroup label="🚜 Material Handling" data-en="Material Handling" data-es="Manejo de Materiales">
+              <option>Forklift #1 (FL-01)</option>
+              <option>Forklift #2 (FL-02)</option>
+              <option>Forklift #3 (FL-03)</option>
+              <option>Automatic Pallet Jack 01 IM (APJ-01)</option>
+              <option>Automatic Pallet Jack 02 IM (APJ-02)</option>
+              <option>Automatic Pallet Jack Shipping (APJ-03)</option>
+            </optgroup>
+
+            <optgroup label="🔧 Utilities &amp; Amenities" data-en="Utilities &amp; Amenities" data-es="Servicios y Comodidades">
+              <option>Ice Machine (ICE-01)</option>
+              <option>Water Dispenser Employee Breakroom (WD-01)</option>
+              <option>Water Dispenser Mold Maintenance (WD-02)</option>
+              <option>Water Filter Manager Breakroom (WD-03)</option>
+              <option>Big Fan 1 (BF-01)</option>
+              <option>Big Fan 2 (BF-02)</option>
+              <option>Big Fan 3 (BF-03)</option>
+              <option>Big Fan 4 (BF-04)</option>
+            </optgroup>
+
             <option data-en="Other" data-es="Otro">Other</option>
           </select>
-          <span class="field-error" data-en="Please select an issue type." data-es="Por favor selecciona un tipo de problema.">Please select an issue type.</span>
+          <span class="field-error" data-en="Please select an equipment." data-es="Por favor selecciona un equipo.">Please select an equipment.</span>
         </div>
       </div>
 
