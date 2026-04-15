@@ -440,10 +440,10 @@
       <input
         type="text"
         id="ref-input"
-        data-en-placeholder="e.g. MNT-847291, SAF-392018 or SUG-123456"
-        data-es-placeholder="ej. MNT-847291, SAF-392018 o SUG-123456"
-        placeholder="e.g. MNT-847291, SAF-392018 or SUG-123456"
-        maxlength="12"
+        data-en-placeholder="e.g. MNT-0001, SAF-0042 or SUG-0123"
+        data-es-placeholder="ej. MNT-0001, SAF-0042 o SUG-0123"
+        placeholder="e.g. MNT-0001, SAF-0042 or SUG-0123"
+        maxlength="10"
         autocomplete="off"
         spellcheck="false"
       />
@@ -454,8 +454,8 @@
         <span data-en="Look up" data-es="Buscar">Look up</span>
       </button>
     </div>
-    <div class="hint" data-en="Format: <span>MNT-XXXXXX</span> · <span>SAF-XXXXXX</span> · <span>SUG-XXXXXX</span>" data-es="Formato: <span>MNT-XXXXXX</span> · <span>SAF-XXXXXX</span> · <span>SUG-XXXXXX</span>">Format: <span>MNT-XXXXXX</span> · <span>SAF-XXXXXX</span> · <span>SUG-XXXXXX</span></div>
-    <div class="error-msg" id="error-msg" data-en="Please enter a valid reference number (e.g. MNT-847291)." data-es="Por favor ingresa un número de referencia válido (ej. MNT-847291).">Please enter a valid reference number (e.g. MNT-847291).</div>
+    <div class="hint" data-en="Format: <span>MNT-XXXX</span> · <span>SAF-XXXX</span> · <span>SUG-XXXX</span>" data-es="Formato: <span>MNT-XXXX</span> · <span>SAF-XXXX</span> · <span>SUG-XXXX</span>">Format: <span>MNT-XXXX</span> · <span>SAF-XXXX</span> · <span>SUG-XXXX</span></div>
+    <div class="error-msg" id="error-msg" data-en="Please enter a valid reference number (e.g. MNT-0001)." data-es="Por favor ingresa un número de referencia válido (ej. MNT-0001).">Please enter a valid reference number (e.g. MNT-0001).</div>
 
     <!-- Spinner -->
     <div class="lookup-spinner" id="lookup-spinner"></div>
@@ -530,7 +530,7 @@
     const ref = refInput.value.trim().toUpperCase();
 
     // Validate format — now includes SUG
-    if (!/^(MNT|SAF|SUG)-\d{6}$/.test(ref)) {
+    if (!/^(MNT|SAF|SUG)-\d{4,6}$/.test(ref)) {
       refInput.classList.add('error-state');
       errorMsg.classList.add('show');
       return;
